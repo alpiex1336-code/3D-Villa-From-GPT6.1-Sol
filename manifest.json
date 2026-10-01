@@ -1,0 +1,4659 @@
+{
+  "source_sha256": "9f9bb0d152263453a6901df381b61b87ede4709e8891b2b6e6dd1f8a984b312c",
+  "cameras": [
+    {
+      "name": "01 HERO | coastal residence",
+      "position": [
+        43,
+        -48,
+        26
+      ],
+      "direction": [
+        -0.6406326293945312,
+        0.707675576210022,
+        -0.29796868562698364
+      ],
+      "up": [
+        -0.1999720335006714,
+        0.22089938819408417,
+        0.9545757174491882
+      ],
+      "fov_horizontal": 0.7928825616836548
+    },
+    {
+      "name": "02 COURTYARD | pool and limestone",
+      "position": [
+        25,
+        -28,
+        12
+      ],
+      "direction": [
+        -0.6773093938827515,
+        0.7256884574890137,
+        -0.12094774842262268
+      ],
+      "up": [
+        -0.0825248658657074,
+        0.08841940760612488,
+        0.9926589727401733
+      ],
+      "fov_horizontal": 0.7928825616836548
+    },
+    {
+      "name": "03 SALON | furnished interior",
+      "position": [
+        -1,
+        0.8500000238418579,
+        6.650000095367432
+      ],
+      "direction": [
+        -0.7932426929473877,
+        0.6062637567520142,
+        -0.056660085916519165
+      ],
+      "up": [
+        -0.045017510652542114,
+        0.034406229853630066,
+        0.9983935952186584
+      ],
+      "fov_horizontal": 1.328092336654663
+    },
+    {
+      "name": "04 SEA | from bedroom",
+      "position": [
+        -10,
+        2.049999952316284,
+        10.819999694824219
+      ],
+      "direction": [
+        1.304172201344045e-7,
+        -0.9916436076164246,
+        -0.12900739908218384
+      ],
+      "up": [
+        1.6796235513538704e-7,
+        -0.12900739908218384,
+        0.9916436076164246
+      ],
+      "fov_horizontal": 1.176005244255066
+    },
+    {
+      "name": "05 ARRIVAL | garden elevation",
+      "position": [
+        29,
+        32,
+        13
+      ],
+      "direction": [
+        -0.7857347726821899,
+        -0.5960747003555298,
+        -0.16527529060840607
+      ],
+      "up": [
+        -0.13167323172092438,
+        -0.09989029169082642,
+        0.9862474799156189
+      ],
+      "fov_horizontal": 0.8097835779190063
+    },
+    {
+      "name": "06 SUITE | interior",
+      "position": [
+        -7.800000190734863,
+        1.2999999523162842,
+        10.829999923706055
+      ],
+      "direction": [
+        -0.49576541781425476,
+        0.8527165651321411,
+        -0.16459420323371887
+      ],
+      "up": [
+        -0.08272841572761536,
+        0.14229291677474976,
+        0.9863613843917847
+      ],
+      "fov_horizontal": 1.2870022058486938
+    },
+    {
+      "name": "07 OVERVIEW | site",
+      "position": [
+        48,
+        -59,
+        46
+      ],
+      "direction": [
+        -0.5524544715881348,
+        0.6790587306022644,
+        -0.48339778184890747
+      ],
+      "up": [
+        -0.3050662875175476,
+        0.37497732043266296,
+        0.8754008412361145
+      ],
+      "fov_horizontal": 0.7459754347801208
+    },
+    {
+      "name": "08 TOUR | cinematic exterior",
+      "position": [
+        43,
+        -48,
+        26
+      ],
+      "direction": [
+        -0.6406325101852417,
+        0.707675576210022,
+        -0.29796868562698364
+      ],
+      "up": [
+        -0.19997204840183258,
+        0.22089938819408417,
+        0.9545756578445435
+      ],
+      "fov_horizontal": 0.7459754347801208
+    },
+    {
+      "name": "09 KITCHEN | culinary detail",
+      "position": [
+        5.099999904632568,
+        2.299999952316284,
+        6.650000095367432
+      ],
+      "direction": [
+        0.4773101210594177,
+        0.8772186040878296,
+        -0.0516011118888855
+      ],
+      "up": [
+        0.024662524461746216,
+        0.045325830578804016,
+        0.99866783618927
+      ],
+      "fov_horizontal": 1.1426749229431152
+    },
+    {
+      "name": "10 BATH | stone and bronze",
+      "position": [
+        -0.10000000149011612,
+        9.220000267028809,
+        10.800000190734863
+      ],
+      "direction": [
+        -0.8077954649925232,
+        0.5869977474212646,
+        -0.05385303497314453
+      ],
+      "up": [
+        -0.04356539249420166,
+        0.03165758401155472,
+        0.9985488653182983
+      ],
+      "fov_horizontal": 1.417252540588379
+    }
+  ],
+  "lights": [
+    {
+      "name": "Living lamp",
+      "type": "AREA",
+      "position": [
+        -4.099999904632568,
+        7.5,
+        6.429999828338623
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 35,
+      "size": 0.4000000059604645
+    },
+    {
+      "name": "Dining pendant",
+      "type": "AREA",
+      "position": [
+        -0.550000011920929,
+        4.5,
+        7.079999923706055
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 65,
+      "size": 0.30000001192092896
+    },
+    {
+      "name": "Dining pendant.001",
+      "type": "AREA",
+      "position": [
+        0.6000000238418579,
+        4.5,
+        7.079999923706055
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 65,
+      "size": 0.30000001192092896
+    },
+    {
+      "name": "Dining pendant.002",
+      "type": "AREA",
+      "position": [
+        1.75,
+        4.5,
+        7.079999923706055
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 65,
+      "size": 0.30000001192092896
+    },
+    {
+      "name": "Bedside lighting",
+      "type": "AREA",
+      "position": [
+        -11.680000305175781,
+        6.019999980926514,
+        10.319999694824219
+      ],
+      "direction": [
+        0.07252366840839386,
+        -0.018131114542484283,
+        -0.9972018599510193
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 18,
+      "size": 0.23000000417232513
+    },
+    {
+      "name": "Bedside lighting.001",
+      "type": "AREA",
+      "position": [
+        -8.319999694824219,
+        6.019999980926514,
+        10.319999694824219
+      ],
+      "direction": [
+        -0.07252366840839386,
+        -0.018131114542484283,
+        -0.9972018599510193
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 18,
+      "size": 0.23000000417232513
+    },
+    {
+      "name": "Bedside lighting.002",
+      "type": "AREA",
+      "position": [
+        -3.680000066757202,
+        6.019999980926514,
+        10.319999694824219
+      ],
+      "direction": [
+        0.07252397388219833,
+        -0.018130918964743614,
+        -0.9972018003463745
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 18,
+      "size": 0.23000000417232513
+    },
+    {
+      "name": "Bedside lighting.003",
+      "type": "AREA",
+      "position": [
+        -0.3199999928474426,
+        6.019999980926514,
+        10.319999694824219
+      ],
+      "direction": [
+        -0.0725238025188446,
+        -0.018131040036678314,
+        -0.9972019195556641
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 18,
+      "size": 0.23000000417232513
+    },
+    {
+      "name": "Path illumination",
+      "type": "AREA",
+      "position": [
+        -15,
+        -7,
+        4.460000038146973
+      ],
+      "direction": [
+        6.737382562960192e-8,
+        -0.8725060820579529,
+        -0.4886033236980438
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 20,
+      "size": 0.25
+    },
+    {
+      "name": "Path illumination.001",
+      "type": "AREA",
+      "position": [
+        15,
+        -7,
+        4.460000038146973
+      ],
+      "direction": [
+        6.737382562960192e-8,
+        -0.8725060820579529,
+        -0.4886033236980438
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 20,
+      "size": 0.25
+    },
+    {
+      "name": "Path illumination.002",
+      "type": "AREA",
+      "position": [
+        -16,
+        2,
+        4.460000038146973
+      ],
+      "direction": [
+        6.737382562960192e-8,
+        -0.8725060820579529,
+        -0.4886033236980438
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 20,
+      "size": 0.25
+    },
+    {
+      "name": "Path illumination.003",
+      "type": "AREA",
+      "position": [
+        19,
+        2,
+        4.460000038146973
+      ],
+      "direction": [
+        6.737382562960192e-8,
+        -0.8725060820579529,
+        -0.4886033236980438
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 20,
+      "size": 0.25
+    },
+    {
+      "name": "Path illumination.004",
+      "type": "AREA",
+      "position": [
+        -3,
+        17,
+        4.460000038146973
+      ],
+      "direction": [
+        6.737382562960192e-8,
+        -0.8725060820579529,
+        -0.4886033236980438
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 20,
+      "size": 0.25
+    },
+    {
+      "name": "Path illumination.005",
+      "type": "AREA",
+      "position": [
+        3,
+        17,
+        4.460000038146973
+      ],
+      "direction": [
+        6.737382562960192e-8,
+        -0.8725060820579529,
+        -0.4886033236980438
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 20,
+      "size": 0.25
+    },
+    {
+      "name": "Path illumination.006",
+      "type": "AREA",
+      "position": [
+        -3,
+        23,
+        4.460000038146973
+      ],
+      "direction": [
+        6.737382562960192e-8,
+        -0.8725060820579529,
+        -0.4886033236980438
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 20,
+      "size": 0.25
+    },
+    {
+      "name": "Path illumination.007",
+      "type": "AREA",
+      "position": [
+        3,
+        23,
+        4.460000038146973
+      ],
+      "direction": [
+        6.737382562960192e-8,
+        -0.8725060820579529,
+        -0.4886033236980438
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 20,
+      "size": 0.25
+    },
+    {
+      "name": "Sun | late afternoon",
+      "type": "SUN",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        0.5733336210250854,
+        0.2666107714176178,
+        -0.7747305035591125
+      ],
+      "color": [
+        1,
+        0.8799999952316284,
+        0.6899999976158142
+      ],
+      "energy": 2.5,
+      "size": 1
+    },
+    {
+      "name": "Interior ceiling wash",
+      "type": "AREA",
+      "position": [
+        -8,
+        4,
+        8.75
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.800000011920929,
+        0.5699999928474426
+      ],
+      "energy": 320,
+      "size": 3
+    },
+    {
+      "name": "Interior ceiling wash.001",
+      "type": "AREA",
+      "position": [
+        0.5,
+        4.5,
+        8.75
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.800000011920929,
+        0.5699999928474426
+      ],
+      "energy": 320,
+      "size": 3
+    },
+    {
+      "name": "Interior ceiling wash.002",
+      "type": "AREA",
+      "position": [
+        8.5,
+        7.5,
+        8.75
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.800000011920929,
+        0.5699999928474426
+      ],
+      "energy": 320,
+      "size": 3
+    },
+    {
+      "name": "Suite ceiling wash",
+      "type": "AREA",
+      "position": [
+        -10,
+        4.5,
+        12.699999809265137
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.800000011920929,
+        0.6000000238418579
+      ],
+      "energy": 180,
+      "size": 2.5
+    },
+    {
+      "name": "Suite ceiling wash.001",
+      "type": "AREA",
+      "position": [
+        -2,
+        4.5,
+        12.699999809265137
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.800000011920929,
+        0.6000000238418579
+      ],
+      "energy": 180,
+      "size": 2.5
+    },
+    {
+      "name": "Sauna warm wash",
+      "type": "AREA",
+      "position": [
+        25,
+        7,
+        7.75
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.7699999809265137,
+        0.49000000953674316
+      ],
+      "energy": 100,
+      "size": 2
+    },
+    {
+      "name": "Daylight salon glazing",
+      "type": "AREA",
+      "position": [
+        -8,
+        -0.18000000715255737,
+        7.150000095367432
+      ],
+      "direction": [
+        0,
+        0.9831234812736511,
+        -0.18294364213943481
+      ],
+      "color": [
+        0.7599999904632568,
+        0.8600000143051147,
+        1
+      ],
+      "energy": 680,
+      "size": 5
+    },
+    {
+      "name": "Daylight kitchen glazing",
+      "type": "AREA",
+      "position": [
+        9,
+        -0.18000000715255737,
+        7.150000095367432
+      ],
+      "direction": [
+        0,
+        0.9902617931365967,
+        -0.13921764492988586
+      ],
+      "color": [
+        0.7599999904632568,
+        0.8600000143051147,
+        1
+      ],
+      "energy": 750,
+      "size": 5
+    },
+    {
+      "name": "Suite daylight glazing",
+      "type": "AREA",
+      "position": [
+        -10,
+        -0.18000000715255737,
+        11.199999809265137
+      ],
+      "direction": [
+        0,
+        0.9816649556159973,
+        -0.1906144917011261
+      ],
+      "color": [
+        0.7599999904632568,
+        0.8600000143051147,
+        1
+      ],
+      "energy": 350,
+      "size": 3.5
+    },
+    {
+      "name": "Suite daylight glazing.001",
+      "type": "AREA",
+      "position": [
+        -2,
+        -0.18000000715255737,
+        11.199999809265137
+      ],
+      "direction": [
+        0,
+        0.9816649556159973,
+        -0.1906144917011261
+      ],
+      "color": [
+        0.7599999904632568,
+        0.8600000143051147,
+        1
+      ],
+      "energy": 350,
+      "size": 3.5
+    },
+    {
+      "name": "Ensuite ceiling light",
+      "type": "AREA",
+      "position": [
+        -10,
+        10.600000381469727,
+        12.600000381469727
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.8700000047683716,
+        0.699999988079071
+      ],
+      "energy": 260,
+      "size": 2
+    },
+    {
+      "name": "Ensuite ceiling light.001",
+      "type": "AREA",
+      "position": [
+        -2,
+        10.600000381469727,
+        12.600000381469727
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "color": [
+        1,
+        0.8700000047683716,
+        0.699999988079071
+      ],
+      "energy": 260,
+      "size": 2
+    }
+  ],
+  "lightmaps": {
+    "WEB_BATCH_000": {
+      "day": "textures/lightmap_000_day.exr",
+      "night": "textures/lightmap_000_night.exr"
+    },
+    "WEB_BATCH_001": {
+      "day": "textures/lightmap_001_day.exr",
+      "night": "textures/lightmap_001_night.exr"
+    },
+    "WEB_BATCH_002": {
+      "day": "textures/lightmap_002_day.exr",
+      "night": "textures/lightmap_002_night.exr"
+    },
+    "WEB_BATCH_003": {
+      "day": "textures/lightmap_003_day.exr",
+      "night": "textures/lightmap_003_night.exr"
+    },
+    "WEB_BATCH_004": {
+      "day": "textures/lightmap_004_day.exr",
+      "night": "textures/lightmap_004_night.exr"
+    },
+    "WEB_BATCH_005": {
+      "day": "textures/lightmap_005_day.exr",
+      "night": "textures/lightmap_005_night.exr"
+    },
+    "WEB_BATCH_006": {
+      "day": "textures/lightmap_006_day.exr",
+      "night": "textures/lightmap_006_night.exr"
+    },
+    "WEB_BATCH_007": {
+      "day": "textures/lightmap_007_day.exr",
+      "night": "textures/lightmap_007_night.exr"
+    },
+    "WEB_BATCH_008": {
+      "day": "textures/lightmap_008_day.exr",
+      "night": "textures/lightmap_008_night.exr"
+    },
+    "WEB_BATCH_009": {
+      "day": "textures/lightmap_009_day.exr",
+      "night": "textures/lightmap_009_night.exr"
+    },
+    "WEB_BATCH_010": {
+      "day": "textures/lightmap_010_day.exr",
+      "night": "textures/lightmap_010_night.exr"
+    },
+    "WEB_BATCH_011": {
+      "day": "textures/lightmap_011_day.exr",
+      "night": "textures/lightmap_011_night.exr"
+    },
+    "WEB_BATCH_012": {
+      "day": "textures/lightmap_012_day.exr",
+      "night": "textures/lightmap_012_night.exr"
+    },
+    "WEB_BATCH_013": {
+      "day": "textures/lightmap_013_day.exr",
+      "night": "textures/lightmap_013_night.exr"
+    },
+    "WEB_BATCH_014": {
+      "day": "textures/lightmap_014_day.exr",
+      "night": "textures/lightmap_014_night.exr"
+    },
+    "WEB_BATCH_015": {
+      "day": "textures/lightmap_015_day.exr",
+      "night": "textures/lightmap_015_night.exr"
+    },
+    "WEB_BATCH_016": {
+      "day": "textures/lightmap_016_day.exr",
+      "night": "textures/lightmap_016_night.exr"
+    },
+    "WEB_BATCH_017": {
+      "day": "textures/lightmap_017_day.exr",
+      "night": "textures/lightmap_017_night.exr"
+    },
+    "WEB_BATCH_018": {
+      "day": "textures/lightmap_018_day.exr",
+      "night": "textures/lightmap_018_night.exr"
+    },
+    "WEB_BATCH_019": {
+      "day": "textures/lightmap_019_day.exr",
+      "night": "textures/lightmap_019_night.exr"
+    },
+    "WEB_BATCH_020": {
+      "day": "textures/lightmap_020_day.exr",
+      "night": "textures/lightmap_020_night.exr"
+    },
+    "WEB_BATCH_021": {
+      "day": "textures/lightmap_021_day.exr",
+      "night": "textures/lightmap_021_night.exr"
+    },
+    "WEB_BATCH_022": {
+      "day": "textures/lightmap_022_day.exr",
+      "night": "textures/lightmap_022_night.exr"
+    },
+    "WEB_BATCH_023": {
+      "day": "textures/lightmap_023_day.exr",
+      "night": "textures/lightmap_023_night.exr"
+    },
+    "WEB_BATCH_024": {
+      "day": "textures/lightmap_024_day.exr",
+      "night": "textures/lightmap_024_night.exr"
+    },
+    "WEB_BATCH_025": {
+      "day": "textures/lightmap_025_day.exr",
+      "night": "textures/lightmap_025_night.exr"
+    },
+    "WEB_BATCH_026": {
+      "day": "textures/lightmap_026_day.exr",
+      "night": "textures/lightmap_026_night.exr"
+    },
+    "WEB_BATCH_027": {
+      "day": "textures/lightmap_027_day.exr",
+      "night": "textures/lightmap_027_night.exr"
+    },
+    "WEB_BATCH_028": {
+      "day": "textures/lightmap_028_day.exr",
+      "night": "textures/lightmap_028_night.exr"
+    },
+    "WEB_BATCH_029": {
+      "day": "textures/lightmap_029_day.exr",
+      "night": "textures/lightmap_029_night.exr"
+    },
+    "WEB_BATCH_030": {
+      "day": "textures/lightmap_030_day.exr",
+      "night": "textures/lightmap_030_night.exr"
+    },
+    "WEB_BATCH_031": {
+      "day": "textures/lightmap_031_day.exr",
+      "night": "textures/lightmap_031_night.exr"
+    },
+    "WEB_BATCH_032": {
+      "day": "textures/lightmap_032_day.exr",
+      "night": "textures/lightmap_032_night.exr"
+    },
+    "WEB_BATCH_033": {
+      "day": "textures/lightmap_033_day.exr",
+      "night": "textures/lightmap_033_night.exr"
+    },
+    "WEB_BATCH_034": {
+      "day": "textures/lightmap_034_day.exr",
+      "night": "textures/lightmap_034_night.exr"
+    },
+    "WEB_BATCH_035": {
+      "day": "textures/lightmap_035_day.exr",
+      "night": "textures/lightmap_035_night.exr"
+    },
+    "WEB_BATCH_036": {
+      "day": "textures/lightmap_036_day.exr",
+      "night": "textures/lightmap_036_night.exr"
+    },
+    "WEB_BATCH_037": {
+      "day": "textures/lightmap_037_day.exr",
+      "night": "textures/lightmap_037_night.exr"
+    },
+    "WEB_BATCH_038": {
+      "day": "textures/lightmap_038_day.exr",
+      "night": "textures/lightmap_038_night.exr"
+    },
+    "WEB_BATCH_039": {
+      "day": "textures/lightmap_039_day.exr",
+      "night": "textures/lightmap_039_night.exr"
+    },
+    "WEB_BATCH_040": {
+      "day": "textures/lightmap_040_day.exr",
+      "night": "textures/lightmap_040_night.exr"
+    },
+    "WEB_BATCH_041": {
+      "day": "textures/lightmap_041_day.exr",
+      "night": "textures/lightmap_041_night.exr"
+    },
+    "WEB_BATCH_042": {
+      "day": "textures/lightmap_042_day.exr",
+      "night": "textures/lightmap_042_night.exr"
+    },
+    "WEB_BATCH_043": {
+      "day": "textures/lightmap_043_day.exr",
+      "night": "textures/lightmap_043_night.exr"
+    },
+    "WEB_BATCH_044": {
+      "day": "textures/lightmap_044_day.exr",
+      "night": "textures/lightmap_044_night.exr"
+    },
+    "WEB_BATCH_045": {
+      "day": "textures/lightmap_045_day.exr",
+      "night": "textures/lightmap_045_night.exr"
+    },
+    "WEB_BATCH_046": {
+      "day": "textures/lightmap_046_day.exr",
+      "night": "textures/lightmap_046_night.exr"
+    },
+    "WEB_BATCH_047": {
+      "day": "textures/lightmap_047_day.exr",
+      "night": "textures/lightmap_047_night.exr"
+    },
+    "WEB_BATCH_048": {
+      "day": "textures/lightmap_048_day.exr",
+      "night": "textures/lightmap_048_night.exr"
+    },
+    "WEB_BATCH_049": {
+      "day": "textures/lightmap_049_day.exr",
+      "night": "textures/lightmap_049_night.exr"
+    },
+    "WEB_BATCH_050": {
+      "day": "textures/lightmap_050_day.exr",
+      "night": "textures/lightmap_050_night.exr"
+    },
+    "WEB_BATCH_051": {
+      "day": "textures/lightmap_051_day.exr",
+      "night": "textures/lightmap_051_night.exr"
+    },
+    "WEB_BATCH_052": {
+      "day": "textures/lightmap_052_day.exr",
+      "night": "textures/lightmap_052_night.exr"
+    },
+    "WEB_BATCH_053": {
+      "day": "textures/lightmap_053_day.exr",
+      "night": "textures/lightmap_053_night.exr"
+    },
+    "WEB_BATCH_054": {
+      "day": "textures/lightmap_054_day.exr",
+      "night": "textures/lightmap_054_night.exr"
+    },
+    "WEB_BATCH_055": {
+      "day": "textures/lightmap_055_day.exr",
+      "night": "textures/lightmap_055_night.exr"
+    },
+    "WEB_BATCH_056": {
+      "day": "textures/lightmap_056_day.exr",
+      "night": "textures/lightmap_056_night.exr"
+    },
+    "WEB_BATCH_057": {
+      "day": "textures/lightmap_057_day.exr",
+      "night": "textures/lightmap_057_night.exr"
+    },
+    "WEB_BATCH_058": {
+      "day": "textures/lightmap_058_day.exr",
+      "night": "textures/lightmap_058_night.exr"
+    },
+    "WEB_BATCH_059": {
+      "day": "textures/lightmap_059_day.exr",
+      "night": "textures/lightmap_059_night.exr"
+    },
+    "WEB_BATCH_060": {
+      "day": "textures/lightmap_060_day.exr",
+      "night": "textures/lightmap_060_night.exr"
+    },
+    "WEB_BATCH_061": {
+      "day": "textures/lightmap_061_day.exr",
+      "night": "textures/lightmap_061_night.exr"
+    },
+    "WEB_BATCH_062": {
+      "day": "textures/lightmap_062_day.exr",
+      "night": "textures/lightmap_062_night.exr"
+    },
+    "WEB_BATCH_063": {
+      "day": "textures/lightmap_063_day.exr",
+      "night": "textures/lightmap_063_night.exr"
+    },
+    "WEB_BATCH_064": {
+      "day": "textures/lightmap_064_day.exr",
+      "night": "textures/lightmap_064_night.exr"
+    },
+    "WEB_BATCH_065": {
+      "day": "textures/lightmap_065_day.exr",
+      "night": "textures/lightmap_065_night.exr"
+    },
+    "WEB_BATCH_066": {
+      "day": "textures/lightmap_066_day.exr",
+      "night": "textures/lightmap_066_night.exr"
+    },
+    "WEB_BATCH_067": {
+      "day": "textures/lightmap_067_day.exr",
+      "night": "textures/lightmap_067_night.exr"
+    },
+    "WEB_BATCH_068": {
+      "day": "textures/lightmap_068_day.exr",
+      "night": "textures/lightmap_068_night.exr"
+    },
+    "WEB_BATCH_069": {
+      "day": "textures/lightmap_069_day.exr",
+      "night": "textures/lightmap_069_night.exr"
+    },
+    "WEB_BATCH_070": {
+      "day": "textures/lightmap_070_day.exr",
+      "night": "textures/lightmap_070_night.exr"
+    },
+    "WEB_BATCH_071": {
+      "day": "textures/lightmap_071_day.exr",
+      "night": "textures/lightmap_071_night.exr"
+    },
+    "WEB_BATCH_072": {
+      "day": "textures/lightmap_072_day.exr",
+      "night": "textures/lightmap_072_night.exr"
+    },
+    "WEB_BATCH_073": {
+      "day": "textures/lightmap_073_day.exr",
+      "night": "textures/lightmap_073_night.exr"
+    },
+    "WEB_BATCH_074": {
+      "day": "textures/lightmap_074_day.exr",
+      "night": "textures/lightmap_074_night.exr"
+    },
+    "WEB_BATCH_075": {
+      "day": "textures/lightmap_075_day.exr",
+      "night": "textures/lightmap_075_night.exr"
+    },
+    "WEB_BATCH_076": {
+      "day": "textures/lightmap_076_day.exr",
+      "night": "textures/lightmap_076_night.exr"
+    },
+    "WEB_BATCH_077": {
+      "day": "textures/lightmap_077_day.exr",
+      "night": "textures/lightmap_077_night.exr"
+    },
+    "WEB_BATCH_078": {
+      "day": "textures/lightmap_078_day.exr",
+      "night": "textures/lightmap_078_night.exr"
+    },
+    "WEB_BATCH_079": {
+      "day": "textures/lightmap_079_day.exr",
+      "night": "textures/lightmap_079_night.exr"
+    },
+    "WEB_BATCH_080": {
+      "day": "textures/lightmap_080_day.exr",
+      "night": "textures/lightmap_080_night.exr"
+    },
+    "WEB_BATCH_081": {
+      "day": "textures/lightmap_081_day.exr",
+      "night": "textures/lightmap_081_night.exr"
+    },
+    "WEB_BATCH_082": {
+      "day": "textures/lightmap_082_day.exr",
+      "night": "textures/lightmap_082_night.exr"
+    },
+    "WEB_BATCH_083": {
+      "day": "textures/lightmap_083_day.exr",
+      "night": "textures/lightmap_083_night.exr"
+    },
+    "WEB_BATCH_084": {
+      "day": "textures/lightmap_084_day.exr",
+      "night": "textures/lightmap_084_night.exr"
+    },
+    "WEB_BATCH_085": {
+      "day": "textures/lightmap_085_day.exr",
+      "night": "textures/lightmap_085_night.exr"
+    }
+  },
+  "models": [
+    {
+      "file": "models/0_architecture.glb",
+      "collection": "01 Architecture",
+      "bytes": 20636792
+    },
+    {
+      "file": "models/1_interiors.glb",
+      "collection": "02 Interiors",
+      "bytes": 62149632
+    },
+    {
+      "file": "models/2_outdoor_furnishings.glb",
+      "collection": "03 Outdoor furnishings",
+      "bytes": 36729368
+    },
+    {
+      "file": "models/3_landscape.glb",
+      "collection": "04 Landscape",
+      "bytes": 79204496
+    },
+    {
+      "file": "models/4_lighting.glb",
+      "collection": "06 Lighting",
+      "bytes": 64588
+    }
+  ],
+  "collision_boxes": [
+    {
+      "name": "Rear terrace",
+      "min": [
+        -16,
+        -3.999999523162842,
+        3.8000001907348633
+      ],
+      "max": [
+        16,
+        12.299999237060547,
+        5
+      ]
+    },
+    {
+      "name": "Pool west deck",
+      "min": [
+        -16,
+        -16,
+        3.8000001907348633
+      ],
+      "max": [
+        -10,
+        -6,
+        5
+      ]
+    },
+    {
+      "name": "Pool east deck",
+      "min": [
+        9,
+        -16,
+        3.8000001907348633
+      ],
+      "max": [
+        15,
+        -6,
+        5
+      ]
+    },
+    {
+      "name": "Infinity coping terrace",
+      "min": [
+        -11,
+        -17,
+        3.8000001907348633
+      ],
+      "max": [
+        9,
+        -15,
+        5
+      ]
+    },
+    {
+      "name": "Pool approach",
+      "min": [
+        -16,
+        -6,
+        3.8000001907348633
+      ],
+      "max": [
+        16,
+        -4,
+        5
+      ]
+    },
+    {
+      "name": "Retaining limestone block",
+      "min": [
+        -16.03499984741211,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -14.96500015258789,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.001",
+      "min": [
+        -14.934999465942383,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -13.864999771118164,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.002",
+      "min": [
+        -13.835000038146973,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -12.765000343322754,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.003",
+      "min": [
+        -12.734999656677246,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -11.664999961853027,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.004",
+      "min": [
+        -11.635000228881836,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -10.565000534057617,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.005",
+      "min": [
+        -10.53499984741211,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -9.46500015258789,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.006",
+      "min": [
+        -9.434999465942383,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -8.364999771118164,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.007",
+      "min": [
+        -8.335000038146973,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -7.265000343322754,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.008",
+      "min": [
+        -7.234999656677246,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -6.164999961853027,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.009",
+      "min": [
+        -6.134999752044678,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -5.065000057220459,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.010",
+      "min": [
+        -5.034999847412109,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -3.9649999141693115,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.011",
+      "min": [
+        -3.93500018119812,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -2.865000009536743,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.012",
+      "min": [
+        -2.8350000381469727,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -1.7649998664855957,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.013",
+      "min": [
+        -1.7350001335144043,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        -0.6650000214576721,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.014",
+      "min": [
+        -0.6350000500679016,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        0.4350000321865082,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.015",
+      "min": [
+        0.4649999737739563,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        1.5350000858306885,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.016",
+      "min": [
+        1.5649998188018799,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        2.634999990463257,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.017",
+      "min": [
+        2.6649999618530273,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        3.7350001335144043,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.018",
+      "min": [
+        3.765000104904175,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        4.835000038146973,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.019",
+      "min": [
+        4.865000247955322,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        5.934999942779541,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.020",
+      "min": [
+        5.965000152587891,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        7.034999847412109,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.021",
+      "min": [
+        7.065000057220459,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        8.135000228881836,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.022",
+      "min": [
+        8.164999961853027,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        9.234999656677246,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.023",
+      "min": [
+        9.265000343322754,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        10.335000038146973,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.024",
+      "min": [
+        10.364999771118164,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        11.434999465942383,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.025",
+      "min": [
+        11.46500015258789,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        12.53499984741211,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.026",
+      "min": [
+        12.565000534057617,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        13.635000228881836,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.027",
+      "min": [
+        13.664999961853027,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        14.734999656677246,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.028",
+      "min": [
+        14.765000343322754,
+        -17.25,
+        1.0299999713897705
+      ],
+      "max": [
+        15.835000038146973,
+        -16.75,
+        1.5299999713897705
+      ]
+    },
+    {
+      "name": "Retaining limestone block.029",
+      "min": [
+        -15.484999656677246,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -14.414999961853027,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.030",
+      "min": [
+        -14.385000228881836,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -13.315000534057617,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.031",
+      "min": [
+        -13.28499984741211,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -12.21500015258789,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.032",
+      "min": [
+        -12.184999465942383,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -11.114999771118164,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.033",
+      "min": [
+        -11.085000038146973,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -10.015000343322754,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.034",
+      "min": [
+        -9.984999656677246,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -8.914999961853027,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.035",
+      "min": [
+        -8.885000228881836,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -7.815000534057617,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.036",
+      "min": [
+        -7.784999847412109,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -6.715000152587891,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.037",
+      "min": [
+        -6.684999942779541,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -5.615000247955322,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.038",
+      "min": [
+        -5.585000038146973,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -4.515000343322754,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.039",
+      "min": [
+        -4.485000133514404,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -3.4149999618530273,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.040",
+      "min": [
+        -3.384999990463257,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -2.31499981880188,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.041",
+      "min": [
+        -2.2850000858306885,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -1.2149999141693115,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.042",
+      "min": [
+        -1.184999942779541,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        -0.11499994993209839,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.043",
+      "min": [
+        -0.08500003814697266,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        0.9850000143051147,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.044",
+      "min": [
+        1.0149998664855957,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        2.0850000381469727,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.045",
+      "min": [
+        2.115000009536743,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        3.18500018119812,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.046",
+      "min": [
+        3.2149999141693115,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        4.284999847412109,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.047",
+      "min": [
+        4.315000057220459,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        5.384999752044678,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.048",
+      "min": [
+        5.414999961853027,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        6.484999656677246,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.049",
+      "min": [
+        6.515000343322754,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        7.585000038146973,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.050",
+      "min": [
+        7.614999771118164,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        8.684999465942383,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.051",
+      "min": [
+        8.71500015258789,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        9.78499984741211,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.052",
+      "min": [
+        9.815000534057617,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        10.885000228881836,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.053",
+      "min": [
+        10.914999961853027,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        11.984999656677246,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.054",
+      "min": [
+        12.015000343322754,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        13.085000038146973,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.055",
+      "min": [
+        13.114999771118164,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        14.184999465942383,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.056",
+      "min": [
+        14.21500015258789,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        15.28499984741211,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.057",
+      "min": [
+        15.315000534057617,
+        -17.25,
+        1.559999942779541
+      ],
+      "max": [
+        16.385000228881836,
+        -16.75,
+        2.059999942779541
+      ]
+    },
+    {
+      "name": "Retaining limestone block.058",
+      "min": [
+        -16.03499984741211,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -14.96500015258789,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.059",
+      "min": [
+        -14.934999465942383,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -13.864999771118164,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.060",
+      "min": [
+        -13.835000038146973,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -12.765000343322754,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.061",
+      "min": [
+        -12.734999656677246,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -11.664999961853027,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.062",
+      "min": [
+        -11.635000228881836,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -10.565000534057617,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.063",
+      "min": [
+        -10.53499984741211,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -9.46500015258789,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.064",
+      "min": [
+        -9.434999465942383,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -8.364999771118164,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.065",
+      "min": [
+        -8.335000038146973,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -7.265000343322754,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.066",
+      "min": [
+        -7.234999656677246,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -6.164999961853027,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.067",
+      "min": [
+        -6.134999752044678,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -5.065000057220459,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.068",
+      "min": [
+        -5.034999847412109,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -3.9649999141693115,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.069",
+      "min": [
+        -3.93500018119812,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -2.865000009536743,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.070",
+      "min": [
+        -2.8350000381469727,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -1.7649998664855957,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.071",
+      "min": [
+        -1.7350001335144043,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        -0.6650000214576721,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.072",
+      "min": [
+        -0.6350000500679016,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        0.4350000321865082,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.073",
+      "min": [
+        0.4649999737739563,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        1.5350000858306885,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.074",
+      "min": [
+        1.5649998188018799,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        2.634999990463257,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.075",
+      "min": [
+        2.6649999618530273,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        3.7350001335144043,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.076",
+      "min": [
+        3.765000104904175,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        4.835000038146973,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.077",
+      "min": [
+        4.865000247955322,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        5.934999942779541,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.078",
+      "min": [
+        5.965000152587891,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        7.034999847412109,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.079",
+      "min": [
+        7.065000057220459,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        8.135000228881836,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.080",
+      "min": [
+        8.164999961853027,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        9.234999656677246,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.081",
+      "min": [
+        9.265000343322754,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        10.335000038146973,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.082",
+      "min": [
+        10.364999771118164,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        11.434999465942383,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.083",
+      "min": [
+        11.46500015258789,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        12.53499984741211,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.084",
+      "min": [
+        12.565000534057617,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        13.635000228881836,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.085",
+      "min": [
+        13.664999961853027,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        14.734999656677246,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.086",
+      "min": [
+        14.765000343322754,
+        -17.25,
+        2.0899999141693115
+      ],
+      "max": [
+        15.835000038146973,
+        -16.75,
+        2.5899999141693115
+      ]
+    },
+    {
+      "name": "Retaining limestone block.087",
+      "min": [
+        -15.484999656677246,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -14.414999961853027,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.088",
+      "min": [
+        -14.385000228881836,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -13.315000534057617,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.089",
+      "min": [
+        -13.28499984741211,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -12.21500015258789,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.090",
+      "min": [
+        -12.184999465942383,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -11.114999771118164,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.091",
+      "min": [
+        -11.085000038146973,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -10.015000343322754,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.092",
+      "min": [
+        -9.984999656677246,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -8.914999961853027,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.093",
+      "min": [
+        -8.885000228881836,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -7.815000534057617,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.094",
+      "min": [
+        -7.784999847412109,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -6.715000152587891,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.095",
+      "min": [
+        -6.684999942779541,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -5.615000247955322,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.096",
+      "min": [
+        -5.585000038146973,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -4.515000343322754,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.097",
+      "min": [
+        -4.485000133514404,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -3.4149999618530273,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.098",
+      "min": [
+        -3.384999990463257,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -2.31499981880188,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.099",
+      "min": [
+        -2.2850000858306885,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -1.2149999141693115,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.100",
+      "min": [
+        -1.184999942779541,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        -0.11499994993209839,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.101",
+      "min": [
+        -0.08500003814697266,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        0.9850000143051147,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.102",
+      "min": [
+        1.0149998664855957,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        2.0850000381469727,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.103",
+      "min": [
+        2.115000009536743,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        3.18500018119812,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.104",
+      "min": [
+        3.2149999141693115,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        4.284999847412109,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.105",
+      "min": [
+        4.315000057220459,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        5.384999752044678,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.106",
+      "min": [
+        5.414999961853027,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        6.484999656677246,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.107",
+      "min": [
+        6.515000343322754,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        7.585000038146973,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.108",
+      "min": [
+        7.614999771118164,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        8.684999465942383,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.109",
+      "min": [
+        8.71500015258789,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        9.78499984741211,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.110",
+      "min": [
+        9.815000534057617,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        10.885000228881836,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.111",
+      "min": [
+        10.914999961853027,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        11.984999656677246,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.112",
+      "min": [
+        12.015000343322754,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        13.085000038146973,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.113",
+      "min": [
+        13.114999771118164,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        14.184999465942383,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.114",
+      "min": [
+        14.21500015258789,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        15.28499984741211,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.115",
+      "min": [
+        15.315000534057617,
+        -17.25,
+        2.619999885559082
+      ],
+      "max": [
+        16.385000228881836,
+        -16.75,
+        3.119999885559082
+      ]
+    },
+    {
+      "name": "Retaining limestone block.116",
+      "min": [
+        -16.03499984741211,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -14.96500015258789,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.117",
+      "min": [
+        -14.934999465942383,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -13.864999771118164,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.118",
+      "min": [
+        -13.835000038146973,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -12.765000343322754,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.119",
+      "min": [
+        -12.734999656677246,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -11.664999961853027,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.120",
+      "min": [
+        -11.635000228881836,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -10.565000534057617,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.121",
+      "min": [
+        -10.53499984741211,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -9.46500015258789,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.122",
+      "min": [
+        -9.434999465942383,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -8.364999771118164,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.123",
+      "min": [
+        -8.335000038146973,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -7.265000343322754,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.124",
+      "min": [
+        -7.234999656677246,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -6.164999961853027,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.125",
+      "min": [
+        -6.134999752044678,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -5.065000057220459,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.126",
+      "min": [
+        -5.034999847412109,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -3.9649999141693115,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.127",
+      "min": [
+        -3.93500018119812,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -2.865000009536743,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.128",
+      "min": [
+        -2.8350000381469727,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -1.7649998664855957,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.129",
+      "min": [
+        -1.7350001335144043,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        -0.6650000214576721,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.130",
+      "min": [
+        -0.6350000500679016,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        0.4350000321865082,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.131",
+      "min": [
+        0.4649999737739563,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        1.5350000858306885,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.132",
+      "min": [
+        1.5649998188018799,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        2.634999990463257,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.133",
+      "min": [
+        2.6649999618530273,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        3.7350001335144043,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.134",
+      "min": [
+        3.765000104904175,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        4.835000038146973,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.135",
+      "min": [
+        4.865000247955322,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        5.934999942779541,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.136",
+      "min": [
+        5.965000152587891,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        7.034999847412109,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.137",
+      "min": [
+        7.065000057220459,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        8.135000228881836,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.138",
+      "min": [
+        8.164999961853027,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        9.234999656677246,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.139",
+      "min": [
+        9.265000343322754,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        10.335000038146973,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.140",
+      "min": [
+        10.364999771118164,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        11.434999465942383,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.141",
+      "min": [
+        11.46500015258789,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        12.53499984741211,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.142",
+      "min": [
+        12.565000534057617,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        13.635000228881836,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.143",
+      "min": [
+        13.664999961853027,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        14.734999656677246,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.144",
+      "min": [
+        14.765000343322754,
+        -17.25,
+        3.1500000953674316
+      ],
+      "max": [
+        15.835000038146973,
+        -16.75,
+        3.6500000953674316
+      ]
+    },
+    {
+      "name": "Retaining limestone block.145",
+      "min": [
+        -15.484999656677246,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -14.414999961853027,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.146",
+      "min": [
+        -14.385000228881836,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -13.315000534057617,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.147",
+      "min": [
+        -13.28499984741211,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -12.21500015258789,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.148",
+      "min": [
+        -12.184999465942383,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -11.114999771118164,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.149",
+      "min": [
+        -11.085000038146973,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -10.015000343322754,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.150",
+      "min": [
+        -9.984999656677246,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -8.914999961853027,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.151",
+      "min": [
+        -8.885000228881836,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -7.815000534057617,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.152",
+      "min": [
+        -7.784999847412109,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -6.715000152587891,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.153",
+      "min": [
+        -6.684999942779541,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -5.615000247955322,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.154",
+      "min": [
+        -5.585000038146973,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -4.515000343322754,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.155",
+      "min": [
+        -4.485000133514404,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -3.4149999618530273,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.156",
+      "min": [
+        -3.384999990463257,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -2.31499981880188,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.157",
+      "min": [
+        -2.2850000858306885,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -1.2149999141693115,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.158",
+      "min": [
+        -1.184999942779541,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        -0.11499994993209839,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.159",
+      "min": [
+        -0.08500003814697266,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        0.9850000143051147,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.160",
+      "min": [
+        1.0149998664855957,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        2.0850000381469727,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.161",
+      "min": [
+        2.115000009536743,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        3.18500018119812,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.162",
+      "min": [
+        3.2149999141693115,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        4.284999847412109,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.163",
+      "min": [
+        4.315000057220459,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        5.384999752044678,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.164",
+      "min": [
+        5.414999961853027,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        6.484999656677246,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.165",
+      "min": [
+        6.515000343322754,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        7.585000038146973,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.166",
+      "min": [
+        7.614999771118164,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        8.684999465942383,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.167",
+      "min": [
+        8.71500015258789,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        9.78499984741211,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.168",
+      "min": [
+        9.815000534057617,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        10.885000228881836,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.169",
+      "min": [
+        10.914999961853027,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        11.984999656677246,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.170",
+      "min": [
+        12.015000343322754,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        13.085000038146973,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.171",
+      "min": [
+        13.114999771118164,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        14.184999465942383,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.172",
+      "min": [
+        14.21500015258789,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        15.28499984741211,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.173",
+      "min": [
+        15.315000534057617,
+        -17.25,
+        3.680000066757202
+      ],
+      "max": [
+        16.385000228881836,
+        -16.75,
+        4.180000305175781
+      ]
+    },
+    {
+      "name": "Retaining limestone block.174",
+      "min": [
+        -16.03499984741211,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -14.96500015258789,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.175",
+      "min": [
+        -14.934999465942383,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -13.864999771118164,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.176",
+      "min": [
+        -13.835000038146973,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -12.765000343322754,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.177",
+      "min": [
+        -12.734999656677246,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -11.664999961853027,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.178",
+      "min": [
+        -11.635000228881836,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -10.565000534057617,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.179",
+      "min": [
+        -10.53499984741211,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -9.46500015258789,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.180",
+      "min": [
+        -9.434999465942383,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -8.364999771118164,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.181",
+      "min": [
+        -8.335000038146973,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -7.265000343322754,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.182",
+      "min": [
+        -7.234999656677246,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -6.164999961853027,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.183",
+      "min": [
+        -6.134999752044678,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -5.065000057220459,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.184",
+      "min": [
+        -5.034999847412109,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -3.9649999141693115,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.185",
+      "min": [
+        -3.93500018119812,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -2.865000009536743,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.186",
+      "min": [
+        -2.8350000381469727,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -1.7649998664855957,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.187",
+      "min": [
+        -1.7350001335144043,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        -0.6650000214576721,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.188",
+      "min": [
+        -0.6350000500679016,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        0.4350000321865082,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.189",
+      "min": [
+        0.4649999737739563,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        1.5350000858306885,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.190",
+      "min": [
+        1.5649998188018799,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        2.634999990463257,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.191",
+      "min": [
+        2.6649999618530273,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        3.7350001335144043,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.192",
+      "min": [
+        3.765000104904175,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        4.835000038146973,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.193",
+      "min": [
+        4.865000247955322,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        5.934999942779541,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.194",
+      "min": [
+        5.965000152587891,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        7.034999847412109,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.195",
+      "min": [
+        7.065000057220459,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        8.135000228881836,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.196",
+      "min": [
+        8.164999961853027,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        9.234999656677246,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.197",
+      "min": [
+        9.265000343322754,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        10.335000038146973,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.198",
+      "min": [
+        10.364999771118164,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        11.434999465942383,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.199",
+      "min": [
+        11.46500015258789,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        12.53499984741211,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.200",
+      "min": [
+        12.565000534057617,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        13.635000228881836,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.201",
+      "min": [
+        13.664999961853027,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        14.734999656677246,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "Retaining limestone block.202",
+      "min": [
+        14.765000343322754,
+        -17.25,
+        4.210000038146973
+      ],
+      "max": [
+        15.835000038146973,
+        -16.75,
+        4.710000038146973
+      ]
+    },
+    {
+      "name": "West pool wall",
+      "min": [
+        -10.299999237060547,
+        -15.300000190734863,
+        3.505000114440918
+      ],
+      "max": [
+        -10,
+        -7.699999809265137,
+        4.954999923706055
+      ]
+    },
+    {
+      "name": "East pool wall",
+      "min": [
+        7.999999523162842,
+        -15.300000190734863,
+        3.505000114440918
+      ],
+      "max": [
+        8.299999237060547,
+        -7.699999809265137,
+        4.954999923706055
+      ]
+    },
+    {
+      "name": "Rear pool wall",
+      "min": [
+        -10,
+        -8,
+        3.505000114440918
+      ],
+      "max": [
+        8,
+        -7.699999809265137,
+        4.954999923706055
+      ]
+    },
+    {
+      "name": "Infinity weir",
+      "min": [
+        -10,
+        -15.255000114440918,
+        3.505000114440918
+      ],
+      "max": [
+        8,
+        -15.005000114440918,
+        4.715000152587891
+      ]
+    },
+    {
+      "name": "House limestone plinth",
+      "min": [
+        -14.149999618530273,
+        -0.15000009536743164,
+        4.244999885559082
+      ],
+      "max": [
+        14.149999618530273,
+        12.149999618530273,
+        4.994999885559082
+      ]
+    },
+    {
+      "name": "West wing wall",
+      "min": [
+        -14.15999984741211,
+        0,
+        5
+      ],
+      "max": [
+        -13.84000015258789,
+        12,
+        9
+      ]
+    },
+    {
+      "name": "East wing wall",
+      "min": [
+        13.84000015258789,
+        3,
+        5
+      ],
+      "max": [
+        14.15999984741211,
+        12,
+        9
+      ]
+    },
+    {
+      "name": "Sea facade structural pier",
+      "min": [
+        -13.769999504089355,
+        -0.23999999463558197,
+        5
+      ],
+      "max": [
+        -13.529999732971191,
+        0.23999999463558197,
+        9
+      ]
+    },
+    {
+      "name": "Sea facade structural pier.001",
+      "min": [
+        1.4299999475479126,
+        -0.23999999463558197,
+        5
+      ],
+      "max": [
+        1.6699999570846558,
+        0.23999999463558197,
+        9
+      ]
+    },
+    {
+      "name": "Sea facade structural pier.002",
+      "min": [
+        13.430000305175781,
+        -0.23999999463558197,
+        5
+      ],
+      "max": [
+        13.670000076293945,
+        0.23999999463558197,
+        9
+      ]
+    },
+    {
+      "name": "Study separation wall",
+      "min": [
+        -13.75,
+        8.710000038146973,
+        5
+      ],
+      "max": [
+        -2.25,
+        8.890000343322754,
+        9
+      ]
+    },
+    {
+      "name": "Study door header",
+      "min": [
+        -2.5999999046325684,
+        8.710000038146973,
+        8.399999618530273
+      ],
+      "max": [
+        -1.399999976158142,
+        8.890000343322754,
+        9
+      ]
+    },
+    {
+      "name": "Service screen",
+      "min": [
+        4.019999980926514,
+        5.5,
+        5
+      ],
+      "max": [
+        4.179999828338623,
+        11.899999618530273,
+        8.100000381469727
+      ]
+    },
+    {
+      "name": "Upper west wall",
+      "min": [
+        -14.149999618530273,
+        0,
+        9.200000762939453
+      ],
+      "max": [
+        -13.850000381469727,
+        12,
+        12.84000015258789
+      ]
+    },
+    {
+      "name": "Upper rear wall",
+      "min": [
+        -14,
+        11.850000381469727,
+        9.200000762939453
+      ],
+      "max": [
+        2,
+        12.149999618530273,
+        12.84000015258789
+      ]
+    },
+    {
+      "name": "Bathroom partition",
+      "min": [
+        -13.899999618530273,
+        8.90999984741211,
+        9.200000762939453
+      ],
+      "max": [
+        -8.100000381469727,
+        9.09000015258789,
+        12.84000015258789
+      ]
+    },
+    {
+      "name": "Bathroom door header",
+      "min": [
+        -8.074999809265137,
+        8.90999984741211,
+        12.149999618530273
+      ],
+      "max": [
+        -6.925000190734863,
+        9.09000015258789,
+        12.850000381469727
+      ]
+    },
+    {
+      "name": "Bathroom partition.001",
+      "min": [
+        -5.900000095367432,
+        8.90999984741211,
+        9.200000762939453
+      ],
+      "max": [
+        -0.09999990463256836,
+        9.09000015258789,
+        12.84000015258789
+      ]
+    },
+    {
+      "name": "Bathroom door header.001",
+      "min": [
+        -0.07499998807907104,
+        8.90999984741211,
+        12.149999618530273
+      ],
+      "max": [
+        1.0750000476837158,
+        9.09000015258789,
+        12.850000381469727
+      ]
+    },
+    {
+      "name": "Stair stringer",
+      "min": [
+        15.960000038146973,
+        1.9706306457519531,
+        4.727680206298828
+      ],
+      "max": [
+        16.079999923706055,
+        9.529369354248047,
+        9.042320251464844
+      ]
+    },
+    {
+      "name": "Stair handrail",
+      "min": [
+        16.00200080871582,
+        2.0411603450775146,
+        6.03432035446167
+      ],
+      "max": [
+        16.038000106811523,
+        9.50883960723877,
+        10.265679359436035
+      ]
+    },
+    {
+      "name": "Stair stringer.001",
+      "min": [
+        17.420000076293945,
+        1.9706306457519531,
+        4.727680206298828
+      ],
+      "max": [
+        17.53999900817871,
+        9.529369354248047,
+        9.042320251464844
+      ]
+    },
+    {
+      "name": "Stair handrail.001",
+      "min": [
+        17.461999893188477,
+        2.0411603450775146,
+        6.03432035446167
+      ],
+      "max": [
+        17.49799919128418,
+        9.50883960723877,
+        10.265679359436035
+      ]
+    },
+    {
+      "name": "Upper east front wall",
+      "min": [
+        1.850000023841858,
+        0,
+        9.200000762939453
+      ],
+      "max": [
+        2.1500000953674316,
+        8,
+        12.84000015258789
+      ]
+    },
+    {
+      "name": "Upper east rear pier",
+      "min": [
+        1.850000023841858,
+        11.200000762939453,
+        9.200000762939453
+      ],
+      "max": [
+        2.1500000953674316,
+        12,
+        12.84000015258789
+      ]
+    },
+    {
+      "name": "Upper access door lintel",
+      "min": [
+        1.850000023841858,
+        8,
+        12.149999618530273
+      ],
+      "max": [
+        2.1500000953674316,
+        11.200000762939453,
+        12.850000381469727
+      ]
+    },
+    {
+      "name": "Sauna raised stone base",
+      "min": [
+        22.5,
+        4,
+        3.999999761581421
+      ],
+      "max": [
+        27.5,
+        10,
+        4.899999618530273
+      ]
+    },
+    {
+      "name": "Sauna solid wall",
+      "min": [
+        22.520000457763672,
+        4,
+        5
+      ],
+      "max": [
+        22.68000030517578,
+        10,
+        7.899999618530273
+      ]
+    },
+    {
+      "name": "Sauna solid wall.001",
+      "min": [
+        27.31999969482422,
+        4,
+        5
+      ],
+      "max": [
+        27.479999542236328,
+        10,
+        7.899999618530273
+      ]
+    },
+    {
+      "name": "Sauna back wall",
+      "min": [
+        22.600000381469727,
+        9.920000076293945,
+        5
+      ],
+      "max": [
+        27.399999618530273,
+        10.079999923706055,
+        7.899999618530273
+      ]
+    },
+    {
+      "name": "Pool rear coping and approach",
+      "min": [
+        -10,
+        -8,
+        3.8000001907348633
+      ],
+      "max": [
+        8,
+        -6,
+        5
+      ]
+    },
+    {
+      "name": "Continuous building footing",
+      "min": [
+        -14.149999618530273,
+        -0.15000009536743164,
+        3.7799999713897705
+      ],
+      "max": [
+        14.149999618530273,
+        12.149999618530273,
+        4.340000152587891
+      ]
+    },
+    {
+      "name": "Stair bottom landing",
+      "min": [
+        15.600000381469727,
+        0.6499999761581421,
+        3.8000001907348633
+      ],
+      "max": [
+        17.899999618530273,
+        2.1500000953674316,
+        5
+      ]
+    },
+    {
+      "name": "Suite west partition front",
+      "min": [
+        -6.099999904632568,
+        1.999999761581421,
+        9.200000762939453
+      ],
+      "max": [
+        -5.900000095367432,
+        6.899999618530273,
+        12.84000015258789
+      ]
+    },
+    {
+      "name": "Suite west partition rear",
+      "min": [
+        -6.099999904632568,
+        8.5,
+        9.200000762939453
+      ],
+      "max": [
+        -5.900000095367432,
+        12,
+        12.84000015258789
+      ]
+    },
+    {
+      "name": "Suite west doorway lintel",
+      "min": [
+        -6.099999904632568,
+        6.899999618530273,
+        12.25
+      ],
+      "max": [
+        -5.900000095367432,
+        8.5,
+        12.850000381469727
+      ]
+    },
+    {
+      "name": "Rear wall west",
+      "min": [
+        -14,
+        11.84000015258789,
+        5
+      ],
+      "max": [
+        -1.1999998092651367,
+        12.15999984741211,
+        9
+      ]
+    },
+    {
+      "name": "Rear wall east",
+      "min": [
+        1.1999998092651367,
+        11.84000015258789,
+        5
+      ],
+      "max": [
+        14,
+        12.15999984741211,
+        9
+      ]
+    },
+    {
+      "name": "Rear entrance lintel",
+      "min": [
+        -1.2000000476837158,
+        11.84000015258789,
+        8.299999237060547
+      ],
+      "max": [
+        1.2000000476837158,
+        12.15999984741211,
+        9
+      ]
+    },
+    {
+      "name": "Arrival staircase",
+      "min": [
+        -1.399999976158142,
+        12.390000343322754,
+        3.8999998569488525
+      ],
+      "max": [
+        1.399999976158142,
+        12.8100004196167,
+        5
+      ]
+    },
+    {
+      "name": "Arrival staircase.001",
+      "min": [
+        -1.399999976158142,
+        12.789999961853027,
+        3.8999998569488525
+      ],
+      "max": [
+        1.399999976158142,
+        13.210000038146973,
+        4.839999675750732
+      ]
+    },
+    {
+      "name": "Arrival staircase.002",
+      "min": [
+        -1.399999976158142,
+        13.1899995803833,
+        3.9000000953674316
+      ],
+      "max": [
+        1.399999976158142,
+        13.609999656677246,
+        4.679999828338623
+      ]
+    },
+    {
+      "name": "Arrival staircase.003",
+      "min": [
+        -1.399999976158142,
+        13.59000015258789,
+        3.9000000953674316
+      ],
+      "max": [
+        1.399999976158142,
+        14.010000228881836,
+        4.519999980926514
+      ]
+    },
+    {
+      "name": "Arrival staircase.004",
+      "min": [
+        -1.399999976158142,
+        13.989999771118164,
+        3.9000000953674316
+      ],
+      "max": [
+        1.399999976158142,
+        14.40999984741211,
+        4.360000133514404
+      ]
+    },
+    {
+      "name": "Arrival upper landing",
+      "min": [
+        -1.399999976158142,
+        12.200000762939453,
+        3.8000001907348633
+      ],
+      "max": [
+        1.399999976158142,
+        12.5,
+        5
+      ]
+    },
+    {
+      "name": "Front terrace perimeter beam",
+      "min": [
+        -16,
+        -16.850000381469727,
+        3.8000001907348633
+      ],
+      "max": [
+        16,
+        -15.949999809265137,
+        5
+      ]
+    },
+    {
+      "name": "Sauna access step",
+      "min": [
+        25.174999237060547,
+        2.129999876022339,
+        3.8500001430511475
+      ],
+      "max": [
+        26.825000762939453,
+        2.4700000286102295,
+        4.200000286102295
+      ]
+    },
+    {
+      "name": "Sauna access step.001",
+      "min": [
+        25.174999237060547,
+        2.4499998092651367,
+        3.8499999046325684
+      ],
+      "max": [
+        26.825000762939453,
+        2.7899999618530273,
+        4.360000133514404
+      ]
+    },
+    {
+      "name": "Sauna access step.002",
+      "min": [
+        25.174999237060547,
+        2.7699999809265137,
+        3.8499999046325684
+      ],
+      "max": [
+        26.825000762939453,
+        3.1100001335144043,
+        4.519999980926514
+      ]
+    },
+    {
+      "name": "Sauna access step.003",
+      "min": [
+        25.174999237060547,
+        3.0899999141693115,
+        3.8499999046325684
+      ],
+      "max": [
+        26.825000762939453,
+        3.430000066757202,
+        4.679999828338623
+      ]
+    },
+    {
+      "name": "Sauna access step.004",
+      "min": [
+        25.174999237060547,
+        3.4099998474121094,
+        3.8499999046325684
+      ],
+      "max": [
+        26.825000762939453,
+        3.75,
+        4.839999675750732
+      ]
+    },
+    {
+      "name": "Sauna access step.005",
+      "min": [
+        25.174999237060547,
+        3.7300000190734863,
+        3.8500001430511475
+      ],
+      "max": [
+        26.825000762939453,
+        4.070000171661377,
+        5
+      ]
+    }
+  ],
+  "material_bakes": {
+    "Bark | fissured": {
+      "color": "textures/native_00_color.png",
+      "normal": "textures/native_00_normal.png"
+    },
+    "Earthenware | oxblood": {
+      "color": "textures/native_01_color.png",
+      "normal": "textures/native_01_normal.png"
+    },
+    "Limestone | honed warm shell": {
+      "color": "textures/native_02_color.png",
+      "normal": "textures/native_02_normal.png"
+    },
+    "Linen | oatmeal weave": {
+      "color": "textures/native_03_color.png",
+      "normal": "textures/native_03_normal.png"
+    },
+    "Linen | soft ivory": {
+      "color": "textures/native_04_color.png",
+      "normal": "textures/native_04_normal.png"
+    },
+    "Microcement | ivory": {
+      "color": "textures/native_05_color.png",
+      "normal": "textures/native_05_normal.png"
+    },
+    "Mineral plaster | chalk": {
+      "color": "textures/native_06_color.png",
+      "normal": "textures/native_06_normal.png"
+    },
+    "Oak | sawn grain": {
+      "color": "textures/native_07_color.png",
+      "normal": "textures/native_07_normal.png"
+    },
+    "Pool mosaic | aquamarine": {
+      "color": "textures/native_08_color.png",
+      "normal": "textures/native_08_normal.png"
+    },
+    "Velvet | olive blue": {
+      "color": "textures/native_09_color.png",
+      "normal": "textures/native_09_normal.png"
+    }
+  },
+  "batches": 125,
+  "instance_objects": 140,
+  "mirrors": [
+    {
+      "name": "Mirror",
+      "position": [
+        -11.649999618530273,
+        11.805000305175781,
+        11.069999694824219
+      ],
+      "dimensions": [
+        1.149999976158142,
+        0.014999999664723873,
+        1.100000023841858
+      ]
+    },
+    {
+      "name": "Mirror.001",
+      "position": [
+        -10.25,
+        11.805000305175781,
+        11.069999694824219
+      ],
+      "dimensions": [
+        1.149999976158142,
+        0.014999999664723873,
+        1.100000023841858
+      ]
+    },
+    {
+      "name": "Mirror.002",
+      "position": [
+        -3.6500000953674316,
+        11.805000305175781,
+        11.069999694824219
+      ],
+      "dimensions": [
+        1.149999976158142,
+        0.014999999664723873,
+        1.100000023841858
+      ]
+    },
+    {
+      "name": "Mirror.003",
+      "position": [
+        -2.25,
+        11.805000305175781,
+        11.069999694824219
+      ],
+      "dimensions": [
+        1.149999976158142,
+        0.014999999664723873,
+        1.100000023841858
+      ]
+    }
+  ]
+}
