@@ -1,5 +1,5 @@
 import {releaseResources} from './viewer-lifecycle.640f856397fa.js';
-import {createDelivery} from './asset-transport.79b9745cfe59.js';
+import {createDelivery} from './asset-transport.f8fb4ec56162.js';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {DRACOLoader} from 'three/addons/loaders/DRACOLoader.js';
@@ -210,9 +210,9 @@ async function init(){
   delivery=await createDelivery('v1',siteBase);
   delivery.setActive(viewerVisible);
   if(delivery.spec.source_sha256&&delivery.spec.source_sha256!==manifest.source_sha256)throw Error('Delivery source mismatch');
-  diagnostics.delivery=delivery.stats;diagnostics.loading={startMs:0,previewMs:null,readyMs:null};
+  if(viewerDisposed){delivery.dispose();return;}diagnostics.delivery=delivery.stats;diagnostics.loading={startMs:0,previewMs:null,readyMs:null};
   progress(5,'正在載入天空與材質…');
-  const hdr=await delivery.hdr('textures/sky.hdr');hdr.mapping=THREE.EquirectangularReflectionMapping;scene.background=hdr;scene.environment=hdr;scene.backgroundRotation.y=Math.PI*2/3;scene.environmentRotation.y=Math.PI*2/3;scene.backgroundIntensity=.7;scene.environmentIntensity=.7;
+  const hdr=await delivery.hdr('textures/sky.hdr');if(viewerDisposed){hdr.dispose();return;}hdr.mapping=THREE.EquirectangularReflectionMapping;scene.background=hdr;scene.environment=hdr;scene.backgroundRotation.y=Math.PI*2/3;scene.environmentRotation.y=Math.PI*2/3;scene.backgroundIntensity=.7;scene.environmentIntensity=.7;
   const draco=sceneDecoder=new DRACOLoader();draco.setDecoderPath(assetUrl('vendor/three/examples/jsm/libs/draco/gltf/'));draco.setWorkerLimit(2);
   const loader=new GLTFLoader();loader.setDRACOLoader(draco);
   const modelBytesTotal=manifest.models.reduce((sum,entry)=>sum+(entry.bytes||0),0);let modelBytesLoaded=0;
