@@ -1,4 +1,5 @@
 import {releaseResources} from './viewer-lifecycle.640f856397fa.js';
+import {releaseUploadedPixels} from './resident-textures.e8d6de2920a4.js';
 import {createDelivery} from './asset-transport.f8fb4ec56162.js';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
@@ -19,7 +20,7 @@ const $=s=>document.querySelector(s), loading=$('#loading');
 const siteBase=new URL('.',import.meta.url),assetUrl=path=>new URL(path.replace(/^\/+/,''),siteBase).href;
 let viewerDisposed=false,frameRequest=0,sceneDecoder=null;
 let delivery,viewerVisible=true;
-try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
+viewerVisible=window.parent===window;
 const diagnostics={ready:false,interactive:false,errors:[],source:null,models:[],lightmaps:0,frames:[],mode:'orbit',quality:'high',lighting:'day',probeCount:0};
 window.addEventListener('error',e=>diagnostics.errors.push(e.message));
 window.addEventListener('unhandledrejection',e=>diagnostics.errors.push(String(e.reason)));
@@ -68,7 +69,7 @@ const rooms=[
 function zUp(a){return new THREE.Vector3(a[0],a[2],-a[1]);}
 function progress(value,text){notifyHost('progress',{value,text});loadProgressValue=Math.max(loadProgressValue,Math.min(100,value));const pct=loadProgressValue;$('#load-progress').style.width=`${pct}%`;$('#load-status').textContent=text;const stream=$('#stream-status');if(interactive){stream.hidden=false;$('#stream-progress').style.width=`${pct}%`;$('#stream-message').textContent=text;}}
 function toast(text){$('#toast').textContent=text;$('#toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').hidden=true,4000);}
-function imageTexture(url,onProgress){if(!textures.has(url))textures.set(url,delivery.texture(url,onProgress).then(t=>{t.channel=1;t.flipY=false;t.repeat.set(1,-1);t.offset.y=1;t.colorSpace=THREE.LinearSRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return t;}));return textures.get(url);}
+function imageTexture(url,onProgress){if(!textures.has(url))textures.set(url,delivery.texture(url,onProgress).then(t=>{t.channel=1;t.flipY=false;t.repeat.set(1,-1);t.offset.y=1;t.colorSpace=THREE.LinearSRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return releaseUploadedPixels(t,bytes=>{diagnostics.releasedPixelBytes=(diagnostics.releasedPixelBytes||0)+bytes;});}));return textures.get(url);}
 function patchLightmap(m){
  m.onBeforeCompile=shader=>{
   if(m.lightMap){
@@ -208,7 +209,7 @@ async function init(){
  try{
   manifest=await fetch(assetUrl('manifest.json')).then(r=>{if(!r.ok)throw Error('巡覽模型尚未完成匯出');return r.json();});diagnostics.source=manifest.source_sha256;lightmapJobsExpected=Object.keys(manifest.lightmaps).length;
   delivery=await createDelivery('v1',siteBase);
-  delivery.setActive(viewerVisible);
+  delivery.setActive(true);
   if(delivery.spec.source_sha256&&delivery.spec.source_sha256!==manifest.source_sha256)throw Error('Delivery source mismatch');
   if(viewerDisposed){delivery.dispose();return;}diagnostics.delivery=delivery.stats;diagnostics.loading={startMs:0,previewMs:null,readyMs:null};
   progress(5,'正在載入天空與材質…');
@@ -357,7 +358,7 @@ function updateMovement(dt){
 }
 const lastPosition=new THREE.Vector3(),lastQuaternion=new THREE.Quaternion();
 function frame(now){
- if(viewerDisposed)return;
+ if(viewerDisposed||!viewerVisible){frameRequest=0;return;}
  frameRequest=requestAnimationFrame(frame);const dt=Math.min(.05,(now-lastFrame)/1000);lastFrame=now;
  if(!interactive||!viewerVisible||document.hidden||probeBusy)return;
  let moved=false;
@@ -401,15 +402,18 @@ $('#gallery-open').addEventListener('click',()=>$('#gallery').showModal());$('#g
 function measure(seconds,type){return new Promise(resolve=>{const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),mode};measurement={type,start:performance.now(),center:new THREE.Vector3(0,7,0),radius:60,height:22,quaternion:saved.quaternion};setTimeout(()=>{measurement=null;camera.position.copy(saved.position);camera.quaternion.copy(saved.quaternion);orbit.target.copy(saved.target);dirty=true;const f=diagnostics.frames.filter(x=>x.time>performance.now()-seconds*1000).slice(2),intervals=f.map(x=>x.interval).sort((a,b)=>a-b);resolve({type,seconds,frames:f.length,fps:f.length?1000/(f.reduce((s,x)=>s+x.interval,0)/f.length):0,p95FrameMs:intervals[Math.floor(intervals.length*.95)],quality,gpu:diagnostics.gpu,calls:f.at(-1)?.calls,triangles:f.at(-1)?.triangles,viewport:[innerWidth,innerHeight],pixelRatio:renderer.getPixelRatio()});},seconds*1000);});}
 window.nerida={ready:false,interactive:false,diagnostics,renderer,scene,camera,goTo,setMode,setQuality,setLighting,collisionMeshes,measureOrbit:(seconds=10)=>measure(seconds,'orbit'),measureLook:(seconds=8)=>measure(seconds,'look')};
 
-window.neridaSetVisible=value=>{viewerVisible=!!value;delivery?.setActive(viewerVisible);if(!viewerVisible){keys.clear();moveVelocity.set(0,0,0);if(pointer.isLocked)pointer.unlock();}else{lastFrame=performance.now();dirty=true;}};
+window.neridaSetVisible=value=>{const next=!!value;if(viewerDisposed)return;viewerVisible=next;if(!next){cancelAnimationFrame(frameRequest);frameRequest=0;keys.clear();moveVelocity.set(0,0,0);if(pointer.isLocked)pointer.unlock();}else{lastFrame=performance.now();dirty=true;if(!frameRequest)frameRequest=requestAnimationFrame(frame);}renderer.domElement.dataset.residentVisible=String(next);};
 window.addEventListener('message',event=>{if(event.source===window.parent&&event.origin===location.origin&&event.data?.type==='nerida-visibility')window.neridaSetVisible(event.data.visible);});
 // NERIDA_SINGLE_SCENE_LIFECYCLE_START
 function notifyHost(status,details={}){if(window.parent!==window&&!viewerDisposed)window.parent.postMessage({type:'nerida-viewer',version:1,status,...details},location.origin);}
 function saveView(){return {position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:mode==='orbit'?orbit.target.toArray():camera.getWorldDirection(camera.position.clone()).multiplyScalar(7).add(camera.position).toArray(),fov:camera.fov,light,quality,index:Number(document.querySelector('#bookmarks button.active')?.dataset.index??0)};}
-async function restoreView(saved){if(!saved||viewerDisposed)return;setMode('orbit');transition=null;camera.position.fromArray(saved.position);camera.quaternion.fromArray(saved.quaternion);orbit.target.fromArray(saved.target);camera.fov=saved.fov;camera.updateProjectionMatrix();orbit.update();setQuality(saved.quality||'high',false);const index=saved.index,room=rooms[index];if(room){$('#view-number').textContent=String(index+1).padStart(2,'0')+' / '+rooms.length;$('#view-title').textContent=room[1];$('#view-description').textContent=room[2];document.querySelectorAll('#bookmarks button').forEach(b=>b.classList.toggle('active',+b.dataset.index===index));}else{$('#view-number').textContent='自由視角';$('#view-title').textContent='設計比較';$('#view-description').textContent='維持相同視角，查看兩版設計。';document.querySelectorAll('#bookmarks button').forEach(b=>b.classList.remove('active'));}if(saved.light&&saved.light!==light)await setLighting(saved.light);if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');displayTick++;composer.render();dirty=true;}
+async function waitForLighting(){const start=performance.now();while(lightingBusy||probeBusy){if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');if(performance.now()-start>30000)throw Error('光照切換尚未完成，請稍後重試');await new Promise(r=>setTimeout(r,20));}}
+async function restoreView(saved){if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');await waitForLighting();if(saved){setMode('orbit');transition=null;camera.position.fromArray(saved.position);camera.quaternion.fromArray(saved.quaternion);orbit.target.fromArray(saved.target);camera.fov=saved.fov;camera.updateProjectionMatrix();orbit.update();if(quality!==(saved.quality||'high'))setQuality(saved.quality||'high',false);const index=saved.index,room=rooms[index];if(room){$('#view-number').textContent=String(index+1).padStart(2,'0')+' / '+rooms.length;$('#view-title').textContent=room[1];$('#view-description').textContent=room[2];document.querySelectorAll('#bookmarks button').forEach(b=>b.classList.toggle('active',+b.dataset.index===index));}else{$('#view-number').textContent='自由視角';$('#view-title').textContent='設計比較';$('#view-description').textContent='維持相同視角，查看兩版設計。';document.querySelectorAll('#bookmarks button').forEach(b=>b.classList.remove('active'));}if(saved.light&&saved.light!==light){const errors=diagnostics.errors.length;await setLighting(saved.light);if(light!==saved.light||diagnostics.errors.length!==errors)throw Error('光照切換未完成');}}if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');displayTick++;composer.render();dirty=true;}
+let residentPreparation=null;
+async function prepareResident(){if(residentPreparation)return residentPreparation;residentPreparation=(async()=>{window.neridaSetVisible(false);await waitForLighting();if(diagnostics.errors.length)throw Error('場景準備有未解決錯誤，請重試');const batches=[...new Set(lightmapMaterials.map(x=>x.batch))];for(const variant of ['night','day']){for(let i=0;i<batches.length;i++){if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');notifyHost('progress',{value:100,text:(variant==='night'?'預備夜間光照':'確認日間光照')+'… '+(i+1)+' / '+batches.length});const texture=await imageTexture(manifest.lightmaps[batches[i]][variant]);renderer.initTexture(texture);await new Promise(r=>setTimeout(r,0));}notifyHost('progress',{value:100,text:variant==='night'?'預備夜間反射與材質…':'完成日間反射與材質…'});const errors=diagnostics.errors.length;await setLighting(variant);if(light!==variant||reflectionMaps[variant].length!==6||diagnostics.errors.length!==errors)throw Error('日夜光照或反射準備未完成');await renderer.compileAsync(scene,camera);displayTick++;composer.render();}const allTextures=new Set();scene.traverse(o=>{for(const m of (Array.isArray(o.material)?o.material:[o.material]).filter(Boolean))for(const value of Object.values(m))if(value?.isTexture)allTextures.add(value);});for(const texture of allTextures)renderer.initTexture(texture);if(renderer.getContext().isContextLost())throw Error('GPU 資源不足，場景準備失敗');clearTimeout(toast.timer);$('#toast').hidden=true;renderer.domElement.dataset.residentPrepared='true';renderer.domElement.dataset.releasedPixelBytes=String(diagnostics.releasedPixelBytes||0);return true;})();return residentPreparation;}
 function disposeViewer(){if(viewerDisposed)return null;viewerDisposed=true;viewerVisible=false;ready=false;cancelAnimationFrame(frameRequest);keys.clear();if(pointer.isLocked)pointer.unlock();delivery?.dispose();sceneDecoder?.dispose();clearTimeout(toast.timer);const report=releaseResources({scene,renderer,composer,controls:[orbit,pointer],targets:envTargets,extraMaterials:materials});for(const promise of textures.values())promise.then(t=>{t.dispose();if(t.image?.data)t.image.data=null;}).catch(()=>{});textures.clear();materials.clear();collisionMeshes.length=0;lightmapMaterials.length=0;mirrors.length=0;envTargets.length=0;reflectionMaps.day.length=0;reflectionMaps.night.length=0;lightmapJobs.clear();pendingLightmaps.length=0;renderer.domElement.dataset.disposed='true';return {version:1,...report};}
-window.neridaLifecycle={restore:restoreView,dispose:disposeViewer,async capture(){const state=saveView();if(viewerDisposed||!interactive)return {state,blob:null};transition=null;keys.clear();if(pointer.isLocked)pointer.unlock();displayTick++;composer.render();const blob=await new Promise(resolve=>renderer.domElement.toBlob(resolve,'image/png'));return {state,blob};}};
+window.neridaLifecycle={prepare:prepareResident,restore:restoreView,dispose:disposeViewer,async capture(){await waitForLighting();const state=saveView();if(viewerDisposed||!interactive)return {state,blob:null};transition=null;keys.clear();if(pointer.isLocked)pointer.unlock();displayTick++;composer.render();const blob=await new Promise(resolve=>renderer.domElement.toBlob(resolve,'image/png'));return {state,blob};}};
 window.addEventListener('pagehide',disposeViewer,{once:true});
-renderer.domElement.addEventListener('webglcontextlost',()=>{if(!viewerDisposed)notifyHost('context-lost');});
+renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();if(!viewerDisposed){window.neridaSetVisible(false);notifyHost('context-lost');}});
 // NERIDA_SINGLE_SCENE_LIFECYCLE_END
 frameRequest=requestAnimationFrame(frame);init();
