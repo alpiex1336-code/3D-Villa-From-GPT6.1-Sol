@@ -5,3 +5,4 @@
 @media(max-width:760px){#places{max-height:calc(100dvh - 320px)}}
 
 #viewport canvas:focus{outline:none}#mouse-lock{font-size:11px;white-space:nowrap}#walk-prompt{color:var(--ink)}@media(max-width:900px){#mouse-lock{display:none}}
+#stream-status{position:fixed;z-index:12;top:82px;left:50%;transform:translateX(-50%);width:min(390px,calc(100vw - 36px));padding:10px 14px;border:1px solid rgba(235,235,220,.2);border-radius:5px;background:rgba(22,29,26,.84);backdrop-filter:blur(12px);font-size:11px;line-height:1.5;color:#e4e6dc;pointer-events:none}#stream-status .stream-track{height:2px;margin-top:7px;background:#a0a48e55}#stream-progress{height:100%;width:0;background:#e7dfc3;transition:width .25s}#stream-retry{pointer-events:auto;margin-top:8px;padding:6px 10px;border:1px solid var(--line);border-radius:4px;font-size:11px}@media(max-width:600px){#stream-status{top:70px;width:calc(100vw - 24px);font-size:10px}}

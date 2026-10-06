@@ -10,6 +10,7 @@
 <body>
 <main id="viewport" aria-label="NERIDA 即時 3D 巡覽"></main>
 <div id="loading" role="status" aria-live="polite"><img src="../gallery/01_NERIDA_Hero.png" alt="NERIDA 的原始 Cycles 建築渲染"><div class="load-shade"></div><div class="loading-copy"><span class="eyebrow">A RESIDENCE ABOVE THE SEA</span><h1>NERIDA</h1><p>海崖之上，走進每一個細節。</p><div class="progress-track"><div id="load-progress"></div></div><small id="load-status">正在準備巡覽場景…</small><button id="retry" hidden>重新載入</button></div></div>
+<div id="stream-status" hidden role="status" aria-live="polite"><span id="stream-message"></span><div class="stream-track"><div id="stream-progress"></div></div><button id="stream-retry" hidden>重新載入場景</button></div>
 <header><a class="brand" href="./" aria-label="NERIDA 首頁">NERIDA<span>COASTAL RESIDENCE</span></a><div class="header-right"><span class="local-indicator"><i></i>互動 3D 巡覽</span><button id="gallery-open" class="text-button">原始渲染</button><button id="settings-open" class="icon-button" aria-label="畫面與巡覽設定" title="畫面與巡覽設定"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16M8 3v6M16 9v6M10 15v6"/></svg></button></div></header>
 <aside id="places" class="panel"><div class="panel-title"><span>探索空間</span><button id="places-close" class="icon-button" aria-label="收起空間選單">−</button></div><nav id="bookmarks" aria-label="空間捷徑"></nav><div class="place-foot">28 × 12 m · 地中海海岸住宅</div></aside>
 <button id="places-open" class="floating-button" hidden>探索空間</button>
