@@ -34,6 +34,7 @@ const adapter={
  },
  async transition(previous,version){
   if(!frame)return;
+  status.hidden=true;
   frame.style.visibility='visible';frame.inert=false;frame.setAttribute('aria-hidden','false');
   if(!cover.hidden&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
    const right=version===2;divider.hidden=false;divider.style.left=right?'100%':'0%';
@@ -48,7 +49,7 @@ const adapter={
 const manager=new VersionManager(adapter,state=>{
  stage.dataset.phase=state.phase;stage.dataset.activeVersion=state.active;stage.dataset.requestedVersion=state.requested;stage.dataset.swaps=state.swaps;stage.dataset.maxLiveViewers=records.maxFrames;stage.dataset.destroyedViewers=records.destroyed;stage.dataset.lifecycle=JSON.stringify(records.releases);stage.dataset.cancelledLoads=records.cancelled;
  const target=state.requested===1?2:1;toggle.dataset.target=target;toggle.setAttribute('aria-label',state.error?'重新載入'+(state.requested===1?'第一版':'第二版'):'切換至'+(target===1?'Version 1 原作':'Version 2 Atelier'));toggle.title=toggle.getAttribute('aria-label');$('#nv-toggle-number').textContent=String(target).padStart(2,'0');$('#nv-toggle-name').textContent=target===1?'原作':'Atelier';toggle.classList.toggle('nv-pending',state.busy);
- $('#nv-edition').textContent=state.requested===1?'01 · 原作':'02 · Atelier';document.body.classList.toggle('nv-busy',state.busy);
+ $('#nv-edition').textContent=state.requested===1?'01 · 原作':'02 · Atelier';document.body.classList.toggle('nv-busy',state.busy&&state.phase!=='transition');
  if(state.error){showStatus(state.error,0);toggle.classList.add('nv-error');}else toggle.classList.remove('nv-error');
  if(state.phase==='loading')showStatus('正在準備'+(state.sceneVersion===1?'第一版原作':'第二版 Atelier')+' · 完整畫質',0);
 });
