@@ -12,7 +12,7 @@
  function start(){
   frame?.remove();preview=false;complete=false;failed=false;
   frame=document.createElement('iframe');frame.id='nerida-v2-frame';frame.title='NERIDA Version 2 · Atelier';frame.allow='fullscreen; pointer-lock';frame.allowFullscreen=true;frame.setAttribute('aria-hidden','true');frame.inert=true;
-  frame.src=new URL('v2/index.html',document.baseURI).href;document.body.append(frame);
+  const frameURL=new URL('v2/index.html',document.baseURI);frameURL.searchParams.set('build',document.querySelector?.('meta[name="nerida-v2-build"]')?.content||'current');frame.src=frameURL.href;document.body.append(frame);
   progress('Version 2 · 正在準備 Atelier 巡覽…',0);window.neridaSetVisible?.(false);updateButtons();
  }
  function select(version){
