@@ -1,4 +1,5 @@
-import {createDelivery} from '../asset-transport.a863cb181a89.js';
+import {releaseResources} from '../viewer-lifecycle.640f856397fa.js';
+import {createDelivery} from '../asset-transport.79b9745cfe59.js';
 import {WalkController} from './navigation.js';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
@@ -19,6 +20,7 @@ const $=s=>document.querySelector(s), loading=$('#loading');
 const siteBase=new URL('.',import.meta.url),localAssetUrl=path=>new URL(path.replace(/^\/+/,''),siteBase).href;
 const assetRoot=new URL("https://raw.githubusercontent.com/alpiex1336-code/3D-Villa-From-GPT6.1-Sol/498824bf5abcabccbc59be5a11837864eb015c6e/_assets-v2/");
 const assetUrl=path=>new URL(path.replace(/^\/+/,''),assetRoot).href;
+let viewerDisposed=false,frameRequest=0,sceneDecoder=null;
 let delivery,viewerVisible=true;
 try{viewerVisible=window.parent===window||(window.parent.neridaVersions?.state.requested??2)===2;}catch{viewerVisible=true;}
 const diagnostics={ready:false,errors:[],source:null,models:[],lightmaps:0,frames:[],mode:'orbit',quality:'high',lighting:'day',probeCount:0};
@@ -83,7 +85,7 @@ const rooms=[
  ['18 SCULPTURE','扭轉銅雕','原創扭轉曲面、固定底板與落地石質底座。','18_NERIDA_Sculpture.png']
 ];
 function zUp(a){return new THREE.Vector3(a[0],a[2],-a[1]);}
-function reportHost(status,details={}){if(window.parent!==window)window.parent.postMessage({type:'nerida-v2',status,...details},location.origin);}
+function reportHost(status,details={}){if(window.parent!==window)window.parent.postMessage({type:'nerida-viewer',version:2,status,...details},location.origin);}
 function progress(value,text){const pct=Math.max(0,Math.min(100,value));$('#load-progress').style.width=`${pct}%`;$('#load-status').textContent=text;const stream=$('#stream-status');if(stream&&!stream.hidden){$('#stream-progress').style.width=`${pct}%`;$('#stream-message').textContent=text;}reportHost('progress',{value:pct,text});}
 function toast(text){$('#toast').textContent=text;$('#toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').hidden=true,4000);}
 function imageTexture(url,onProgress){if(!textures.has(url))textures.set(url,delivery.texture(url,onProgress).then(t=>{t.channel=1;t.flipY=false;t.repeat.set(1,-1);t.offset.y=1;t.colorSpace=THREE.LinearSRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return t;}));return textures.get(url);}
@@ -153,7 +155,7 @@ async function loadLightmaps(bindings,start,end,label='日間光照'){
   loaded+=chunk.length;progress(start+(end-start)*loaded/Math.max(1,entries.length),`正在準備${label}貼圖… ${loaded} / ${entries.length}`);dirty=true;displayTick++;await new Promise(resolve=>setTimeout(resolve,0));
  }
 }
-async function loadModel(entry,loader,onProgress){if(!delivery.spec.files[entry.file]||(entry.remote_parts?.length&&typeof DecompressionStream==='undefined'))return loadOriginalModel(entry,loader,onProgress);try{return await delivery.model(entry,loader,onProgress);}catch(error){console.warn('Compressed delivery unavailable; using original model',error);return loadOriginalModel(entry,loader,onProgress);}}
+async function loadModel(entry,loader,onProgress){if(!delivery.spec.files[entry.file]||(entry.remote_parts?.length&&typeof DecompressionStream==='undefined'))return loadOriginalModel(entry,loader,onProgress);try{return await delivery.model(entry,loader,onProgress);}catch(error){if(viewerDisposed)throw error;console.warn('Compressed delivery unavailable; using original model',error);return loadOriginalModel(entry,loader,onProgress);}}
 async function loadOriginalModel(entry,loader,onProgress){
  if(!entry.remote_parts?.length)return loader.loadAsync(assetUrl(entry.file),onProgress);
  const pieces=[];let received=0;
@@ -236,7 +238,7 @@ async function init(){
   diagnostics.delivery=delivery.stats;diagnostics.loading={startMs:0,previewMs:null,readyMs:null};
   progress(5,'正在載入天空與材質…');
   const hdr=await delivery.hdr('textures/sky.hdr');hdr.mapping=THREE.EquirectangularReflectionMapping;scene.background=hdr;scene.environment=hdr;scene.backgroundRotation.y=Math.PI*2/3;scene.environmentRotation.y=Math.PI*2/3;scene.backgroundIntensity=.7;scene.environmentIntensity=.7;
-  const draco=new DRACOLoader();draco.setDecoderPath(localAssetUrl('../vendor/three/examples/jsm/libs/draco/gltf/'));draco.setWorkerLimit(2);
+  const draco=sceneDecoder=new DRACOLoader();draco.setDecoderPath(localAssetUrl('../vendor/three/examples/jsm/libs/draco/gltf/'));draco.setWorkerLimit(2);
   const loader=new GLTFLoader();loader.setDRACOLoader(draco);
   const labels={'01 Architecture':'建築','02 Interiors':'室內家具','03 Outdoor furnishings':'戶外家具','04 Landscape':'海岸與植被','06 Lighting':'燈具'};
   const previewEntry=manifest.models.find(entry=>entry.collection==='01 Architecture');if(!previewEntry)throw Error('找不到建築模型');
@@ -264,9 +266,9 @@ async function init(){
   setupMirrors();progress(93,'正在編譯完整場景…');await renderer.compileAsync(scene,camera);scene.updateMatrixWorld(true);renderer.shadowMap.needsUpdate=true;displayTick++;composer.render();
   ready=true;diagnostics.ready=true;window.nerida.ready=true;navCanvas.dataset.ready='true';navCanvas.dataset.source=manifest.source_sha256;for(const b of document.querySelectorAll('#bookmarks button,[data-mode],#home,#capture'))b.disabled=false;$('#instructions').textContent='拖曳旋轉 · 滾輪縮放 · 右鍵平移';dirty=true;draco.dispose();
   progress(94,'完整場景已載入，正在準備反射…');
-  try{await buildProbes('day');}catch(error){diagnostics.errors.push(String(error));console.error(error);}
+  try{await buildProbes('day');}catch(error){if(viewerDisposed)return;diagnostics.errors.push(String(error));console.error(error);}
   progress(100,'巡覽準備完成');diagnostics.loading.readyMs=performance.now()-diagnostics.loading.startMs;renderer.domElement.dataset.readyMs=String(Math.round(diagnostics.loading.readyMs));renderer.domElement.dataset.deliveryResponseBytes=String(delivery.stats.responseBytes);renderer.domElement.dataset.deliveryCacheHits=String(delivery.stats.cacheHits);$('#stream-status').hidden=true;console.info('NERIDA_READY',diagnostics);reportHost('ready',{source:manifest.source_sha256});
- }catch(error){diagnostics.errors.push(String(error));console.error(error);if(previewReady){$('#stream-status').hidden=false;$('#stream-message').textContent='其餘場景載入失敗：'+error.message+'；重新整理可重試';$('#stream-retry').hidden=false;}else{progress(0,'載入遇到問題：'+error.message);$('#retry').hidden=false;}reportHost('error',{message:error.message});}
+ }catch(error){if(viewerDisposed)return;diagnostics.errors.push(String(error));console.error(error);if(previewReady){$('#stream-status').hidden=false;$('#stream-message').textContent='其餘場景載入失敗：'+error.message+'；重新整理可重試';$('#stream-retry').hidden=false;}else{progress(0,'載入遇到問題：'+error.message);$('#retry').hidden=false;}reportHost('error',{message:error.message});}
 }
 function createBookmarks(){
  [...rooms.map((r,i)=>[r,i]).filter(([r])=>!r[4]),...rooms.map((r,i)=>[r,i]).filter(([r])=>r[4])].forEach(([r,i])=>{const b=document.createElement('button');b.disabled=true;b.innerHTML=`<span>${String(i+1).padStart(2,'0')}</span>${r[4]?'暮色庭院 · 夜間':r[1]}`;b.dataset.index=i;b.addEventListener('click',()=>goTo(i));$('#bookmarks').append(b);const fig=document.createElement('figure');const a=document.createElement('a');a.href=assetUrl('gallery/'+r[3]);a.target='_blank';a.rel='noopener';const img=document.createElement('img');img.src=new URL('../preview/v2_'+r[3].replace('.png','.webp'),import.meta.url).href;img.decoding='async';img.alt=r[1]+' — Blender Cycles 原始渲染';img.loading='lazy';a.append(img);const cap=document.createElement('figcaption');cap.textContent=String(i+1).padStart(2,'0')+' / '+r[1];fig.append(a,cap);$('#gallery-grid').append(fig);});
@@ -366,7 +368,8 @@ function updateMovement(dt){
 }
 const lastPosition=new THREE.Vector3(),lastQuaternion=new THREE.Quaternion();
 function frame(now){
- requestAnimationFrame(frame);const dt=Math.min(.25,Math.max(0,(now-lastFrame)/1000));lastFrame=now;
+ if(viewerDisposed)return;
+ frameRequest=requestAnimationFrame(frame);const dt=Math.min(.25,Math.max(0,(now-lastFrame)/1000));lastFrame=now;
  if(!previewReady||!viewerVisible||document.hidden||probeBusy)return;
  let moved=false;
  if(transition){const t=Math.min(1,(now-transition.start)/transition.duration),e=t*t*(3-2*t);camera.position.lerpVectors(transition.from,transition.to,e);orbit.target.lerpVectors(transition.targetFrom,transition.targetTo,e);camera.fov=THREE.MathUtils.lerp(transition.fovFrom,transition.fovTo,e);camera.updateProjectionMatrix();camera.lookAt(orbit.target);moved=true;if(t===1)transition=null;}
@@ -434,4 +437,13 @@ window.nerida={ready:false,diagnostics,renderer,scene,camera,walker,goTo,setMode
 
 window.neridaSetVisible=value=>{viewerVisible=!!value;delivery?.setActive(viewerVisible);if(!viewerVisible){keys.clear();moveVelocity.set(0,0,0);if(pointer.isLocked)pointer.unlock();}else{lastFrame=performance.now();dirty=true;}};
 window.addEventListener('message',event=>{if(event.source===window.parent&&event.origin===location.origin&&event.data?.type==='nerida-visibility')window.neridaSetVisible(event.data.visible);});
-requestAnimationFrame(frame);init();
+// NERIDA_SINGLE_SCENE_LIFECYCLE_START
+function notifyHost(status,details={}){if(window.parent!==window&&!viewerDisposed)window.parent.postMessage({type:'nerida-viewer',version:2,status,...details},location.origin);}
+function saveView(){return {position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:mode==='orbit'?orbit.target.toArray():camera.getWorldDirection(camera.position.clone()).multiplyScalar(7).add(camera.position).toArray(),fov:camera.fov,light,quality,index:Number(document.querySelector('#bookmarks button.active')?.dataset.index??0)};}
+async function restoreView(saved){if(!saved||viewerDisposed)return;setMode('orbit');transition=null;camera.position.fromArray(saved.position);camera.quaternion.fromArray(saved.quaternion);orbit.target.fromArray(saved.target);camera.fov=saved.fov;camera.updateProjectionMatrix();orbit.update();setQuality(saved.quality||'high',false);const index=saved.index,room=rooms[index];if(room){$('#view-number').textContent=String(index+1).padStart(2,'0')+' / '+rooms.length;$('#view-title').textContent=room[1];$('#view-description').textContent=room[2];document.querySelectorAll('#bookmarks button').forEach(b=>b.classList.toggle('active',+b.dataset.index===index));}else{$('#view-number').textContent='自由視角';$('#view-title').textContent='設計比較';$('#view-description').textContent='維持相同視角，查看兩版設計。';document.querySelectorAll('#bookmarks button').forEach(b=>b.classList.remove('active'));}if(saved.light&&saved.light!==light)await setLighting(saved.light);if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');displayTick++;composer.render();dirty=true;}
+function disposeViewer(){if(viewerDisposed)return null;viewerDisposed=true;viewerVisible=false;ready=false;cancelAnimationFrame(frameRequest);keys.clear();if(pointer.isLocked)pointer.unlock();delivery?.dispose();sceneDecoder?.dispose();clearTimeout(toast.timer);const report=releaseResources({scene,renderer,composer,controls:[orbit,pointer],targets:envTargets,extraMaterials:materials});for(const promise of textures.values())promise.then(t=>{t.dispose();if(t.image?.data)t.image.data=null;}).catch(()=>{});textures.clear();materials.clear();collisionMeshes.length=0;pendingCollisionMeshes.length=0;lightmapMaterials.length=0;mirrors.length=0;envTargets.length=0;reflectionMaps.day.length=0;reflectionMaps.night.length=0;renderer.domElement.dataset.disposed='true';return {version:2,...report};}
+window.neridaLifecycle={restore:restoreView,dispose:disposeViewer,async capture(){const state=saveView();if(viewerDisposed||!previewReady)return {state,blob:null};transition=null;keys.clear();if(pointer.isLocked)pointer.unlock();displayTick++;composer.render();const blob=await new Promise(resolve=>renderer.domElement.toBlob(resolve,'image/png'));return {state,blob};}};
+window.addEventListener('pagehide',disposeViewer,{once:true});
+renderer.domElement.addEventListener('webglcontextlost',()=>{if(!viewerDisposed)notifyHost('context-lost');});
+// NERIDA_SINGLE_SCENE_LIFECYCLE_END
+frameRequest=requestAnimationFrame(frame);init();
