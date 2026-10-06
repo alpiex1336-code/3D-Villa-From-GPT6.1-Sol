@@ -1,3 +1,4 @@
+import {createDelivery} from '../asset-transport.97e5c6d11fb5.js';
 import {WalkController} from './navigation.js';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
@@ -18,7 +19,9 @@ const $=s=>document.querySelector(s), loading=$('#loading');
 const siteBase=new URL('.',import.meta.url),localAssetUrl=path=>new URL(path.replace(/^\/+/,''),siteBase).href;
 const assetRoot=new URL("https://raw.githubusercontent.com/alpiex1336-code/3D-Villa-From-GPT6.1-Sol/498824bf5abcabccbc59be5a11837864eb015c6e/_assets-v2/");
 const assetUrl=path=>new URL(path.replace(/^\/+/,''),assetRoot).href;
-$('#loading img').src=assetUrl('gallery/01_NERIDA_Hero.png');
+let delivery,viewerVisible=true;
+try{viewerVisible=window.parent===window||(window.parent.neridaVersions?.state.requested??2)===2;}catch{viewerVisible=true;}
+try{viewerVisible=window.parent===window||(window.parent.neridaVersions?.state.requested??2)===2;}catch{viewerVisible=true;}
 const diagnostics={ready:false,errors:[],source:null,models:[],lightmaps:0,frames:[],mode:'orbit',quality:'high',lighting:'day',probeCount:0};
 window.addEventListener('error',e=>diagnostics.errors.push(e.message));
 window.addEventListener('unhandledrejection',e=>diagnostics.errors.push(String(e.reason)));
@@ -84,7 +87,7 @@ function zUp(a){return new THREE.Vector3(a[0],a[2],-a[1]);}
 function reportHost(status,details={}){if(window.parent!==window)window.parent.postMessage({type:'nerida-v2',status,...details},location.origin);}
 function progress(value,text){const pct=Math.max(0,Math.min(100,value));$('#load-progress').style.width=`${pct}%`;$('#load-status').textContent=text;const stream=$('#stream-status');if(stream&&!stream.hidden){$('#stream-progress').style.width=`${pct}%`;$('#stream-message').textContent=text;}reportHost('progress',{value:pct,text});}
 function toast(text){$('#toast').textContent=text;$('#toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').hidden=true,4000);}
-function imageTexture(url,onProgress){if(!textures.has(url))textures.set(url,new EXRLoader().setDataType(THREE.HalfFloatType).loadAsync(assetUrl(url),onProgress).then(t=>{t.channel=1;t.flipY=false;t.repeat.set(1,-1);t.offset.y=1;t.colorSpace=THREE.LinearSRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return t;}));return textures.get(url);}
+function imageTexture(url,onProgress){if(!textures.has(url))textures.set(url,delivery.texture(url,onProgress).then(t=>{t.channel=1;t.flipY=false;t.repeat.set(1,-1);t.offset.y=1;t.colorSpace=THREE.LinearSRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return t;}));return textures.get(url);}
 function patchLightmap(m){
  m.onBeforeCompile=shader=>{
   if(m.lightMap){
@@ -151,7 +154,8 @@ async function loadLightmaps(bindings,start,end,label='日間光照'){
   loaded+=chunk.length;progress(start+(end-start)*loaded/Math.max(1,entries.length),`正在準備${label}貼圖… ${loaded} / ${entries.length}`);dirty=true;displayTick++;await new Promise(resolve=>setTimeout(resolve,0));
  }
 }
-async function loadModel(entry,loader,onProgress){
+async function loadModel(entry,loader,onProgress){if(!delivery.spec.files[entry.file]||(entry.remote_parts?.length&&typeof DecompressionStream==='undefined'))return loadOriginalModel(entry,loader,onProgress);try{return await delivery.model(entry,loader,onProgress);}catch(error){console.warn('Compressed delivery unavailable; using original model',error);return loadOriginalModel(entry,loader,onProgress);}}
+async function loadOriginalModel(entry,loader,onProgress){
  if(!entry.remote_parts?.length)return loader.loadAsync(assetUrl(entry.file),onProgress);
  const pieces=[];let received=0;
  for(const part of entry.remote_parts){
@@ -227,8 +231,12 @@ function setupMirrors(){
 async function init(){
  try{
   manifest=await fetch(assetUrl('manifest.json')).then(r=>{if(!r.ok)throw Error('巡覽模型尚未完成匯出');return r.json();});diagnostics.source=manifest.source_sha256;navCanvas.dataset.sourceSha256=manifest.source_sha256;
+  delivery=await createDelivery('v2',assetRoot);
+  delivery.setActive(viewerVisible);
+  if(delivery.spec.source_sha256&&delivery.spec.source_sha256!==manifest.source_sha256)throw Error('Delivery source mismatch');
+  diagnostics.delivery=delivery.stats;diagnostics.loading={startMs:0,previewMs:null,readyMs:null};
   progress(5,'正在載入天空與材質…');
-  const hdr=await new HDRLoader().loadAsync(assetUrl('textures/sky.hdr'));hdr.mapping=THREE.EquirectangularReflectionMapping;scene.background=hdr;scene.environment=hdr;scene.backgroundRotation.y=Math.PI*2/3;scene.environmentRotation.y=Math.PI*2/3;scene.backgroundIntensity=.7;scene.environmentIntensity=.7;
+  const hdr=await delivery.hdr('textures/sky.hdr');hdr.mapping=THREE.EquirectangularReflectionMapping;scene.background=hdr;scene.environment=hdr;scene.backgroundRotation.y=Math.PI*2/3;scene.environmentRotation.y=Math.PI*2/3;scene.backgroundIntensity=.7;scene.environmentIntensity=.7;
   const draco=new DRACOLoader();draco.setDecoderPath(localAssetUrl('../vendor/three/examples/jsm/libs/draco/gltf/'));draco.setWorkerLimit(2);
   const loader=new GLTFLoader();loader.setDRACOLoader(draco);
   const labels={'01 Architecture':'建築','02 Interiors':'室內家具','03 Outdoor furnishings':'戶外家具','04 Landscape':'海岸與植被','06 Lighting':'燈具'};
@@ -246,23 +254,23 @@ async function init(){
   };
   const architectureMaps=await loadEntry(previewEntry,[8,16]);
   configureLights();
-  progress(16,'正在編譯建築預覽…');await renderer.compileAsync(scene,camera);scene.updateMatrixWorld(true);renderer.shadowMap.needsUpdate=true;previewReady=true;dirty=true;displayTick++;composer.render();loading.hidden=true;$('#stream-status').hidden=false;$('#instructions').textContent='可先環繞查看；完整模型與光照正在背景載入';reportHost('preview',{source:manifest.source_sha256});
+  progress(16,'正在編譯建築預覽…');await renderer.compileAsync(scene,camera);scene.updateMatrixWorld(true);renderer.shadowMap.needsUpdate=true;diagnostics.loading.previewMs=performance.now()-diagnostics.loading.startMs;renderer.domElement.dataset.previewMs=String(Math.round(diagnostics.loading.previewMs));previewReady=true;dirty=true;displayTick++;composer.render();loading.hidden=true;$('#stream-status').hidden=false;$('#instructions').textContent='可先環繞查看；完整模型與光照正在背景載入';reportHost('preview',{source:manifest.source_sha256});
   progress(17,'正在補上建築日間光照…');await loadLightmaps(architectureMaps,17,43);
-  const remaining=manifest.models.filter(entry=>entry!==previewEntry).sort((a,b)=>({ '04 Landscape':0,'03 Outdoor furnishings':1,'02 Interiors':2,'06 Lighting':3 }[a.collection]??4)-({ '04 Landscape':0,'03 Outdoor furnishings':1,'02 Interiors':2,'06 Lighting':3 }[b.collection]??4));
+  const remaining=manifest.models.filter(entry=>entry!==previewEntry).sort((a,b)=>({ '03 Outdoor furnishings':0,'04 Landscape':1,'02 Interiors':2,'06 Lighting':3 }[a.collection]??4)-({ '03 Outdoor furnishings':0,'04 Landscape':1,'02 Interiors':2,'06 Lighting':3 }[b.collection]??4));
   const totalModelBytes=remaining.reduce((sum,entry)=>sum+(entry.remote_bytes||entry.bytes||0),0);let completedModelBytes=0;const remainingLightmaps=[];
   for(const entry of remaining){const bytes=entry.remote_bytes||entry.bytes||0,start=43+32*completedModelBytes/Math.max(1,totalModelBytes),end=43+32*(completedModelBytes+bytes)/Math.max(1,totalModelBytes);remainingLightmaps.push(...await loadEntry(entry,[start,end]));completedModelBytes+=bytes;}
   await loadLightmaps(remainingLightmaps,75,87);
   progress(87,'正在整理碰撞與步行資料…');await buildCollisionIndex();
-  progress(92,'正在載入步行導覽資料…');await walker.load(assetUrl('navigation/manifest.json'),manifest.source_sha256);diagnostics.navigationGeometry={source:walker.spec.source_sha256,solidTriangles:walker.spec.solid.triangles,groundTriangles:walker.spec.ground.triangles};
+  progress(92,'正在載入步行導覽資料…');await walker.load(assetUrl('navigation/manifest.json'),manifest.source_sha256,url=>delivery.url(url));diagnostics.navigationGeometry={source:walker.spec.source_sha256,solidTriangles:walker.spec.solid.triangles,groundTriangles:walker.spec.ground.triangles};
   setupMirrors();progress(93,'正在編譯完整場景…');await renderer.compileAsync(scene,camera);scene.updateMatrixWorld(true);renderer.shadowMap.needsUpdate=true;displayTick++;composer.render();
   ready=true;diagnostics.ready=true;window.nerida.ready=true;navCanvas.dataset.ready='true';navCanvas.dataset.source=manifest.source_sha256;for(const b of document.querySelectorAll('#bookmarks button,[data-mode],#home,#capture'))b.disabled=false;$('#instructions').textContent='拖曳旋轉 · 滾輪縮放 · 右鍵平移';dirty=true;draco.dispose();
   progress(94,'完整場景已載入，正在準備反射…');
   try{await buildProbes('day');}catch(error){diagnostics.errors.push(String(error));console.error(error);}
-  progress(100,'巡覽準備完成');$('#stream-status').hidden=true;console.info('NERIDA_READY',diagnostics);reportHost('ready',{source:manifest.source_sha256});
+  progress(100,'巡覽準備完成');diagnostics.loading.readyMs=performance.now()-diagnostics.loading.startMs;renderer.domElement.dataset.readyMs=String(Math.round(diagnostics.loading.readyMs));renderer.domElement.dataset.deliveryResponseBytes=String(delivery.stats.responseBytes);renderer.domElement.dataset.deliveryCacheHits=String(delivery.stats.cacheHits);$('#stream-status').hidden=true;console.info('NERIDA_READY',diagnostics);reportHost('ready',{source:manifest.source_sha256});
  }catch(error){diagnostics.errors.push(String(error));console.error(error);if(previewReady){$('#stream-status').hidden=false;$('#stream-message').textContent='其餘場景載入失敗：'+error.message+'；重新整理可重試';$('#stream-retry').hidden=false;}else{progress(0,'載入遇到問題：'+error.message);$('#retry').hidden=false;}reportHost('error',{message:error.message});}
 }
 function createBookmarks(){
- [...rooms.map((r,i)=>[r,i]).filter(([r])=>!r[4]),...rooms.map((r,i)=>[r,i]).filter(([r])=>r[4])].forEach(([r,i])=>{const b=document.createElement('button');b.disabled=true;b.innerHTML=`<span>${String(i+1).padStart(2,'0')}</span>${r[4]?'暮色庭院 · 夜間':r[1]}`;b.dataset.index=i;b.addEventListener('click',()=>goTo(i));$('#bookmarks').append(b);const fig=document.createElement('figure');const a=document.createElement('a');a.href=assetUrl('gallery/'+r[3]);a.target='_blank';a.rel='noopener';const img=document.createElement('img');img.src=a.href;img.alt=r[1]+' — Blender Cycles 原始渲染';img.loading='lazy';a.append(img);const cap=document.createElement('figcaption');cap.textContent=String(i+1).padStart(2,'0')+' / '+r[1];fig.append(a,cap);$('#gallery-grid').append(fig);});
+ [...rooms.map((r,i)=>[r,i]).filter(([r])=>!r[4]),...rooms.map((r,i)=>[r,i]).filter(([r])=>r[4])].forEach(([r,i])=>{const b=document.createElement('button');b.disabled=true;b.innerHTML=`<span>${String(i+1).padStart(2,'0')}</span>${r[4]?'暮色庭院 · 夜間':r[1]}`;b.dataset.index=i;b.addEventListener('click',()=>goTo(i));$('#bookmarks').append(b);const fig=document.createElement('figure');const a=document.createElement('a');a.href=assetUrl('gallery/'+r[3]);a.target='_blank';a.rel='noopener';const img=document.createElement('img');img.src=new URL('../preview/v2_'+r[3].replace('.png','.webp'),import.meta.url).href;img.decoding='async';img.alt=r[1]+' — Blender Cycles 原始渲染';img.loading='lazy';a.append(img);const cap=document.createElement('figcaption');cap.textContent=String(i+1).padStart(2,'0')+' / '+r[1];fig.append(a,cap);$('#gallery-grid').append(fig);});
 }
 function goTo(index,animate=true){
  if(!ready&&animate)return;
@@ -360,7 +368,7 @@ function updateMovement(dt){
 const lastPosition=new THREE.Vector3(),lastQuaternion=new THREE.Quaternion();
 function frame(now){
  requestAnimationFrame(frame);const dt=Math.min(.25,Math.max(0,(now-lastFrame)/1000));lastFrame=now;
- if(!previewReady||document.hidden||probeBusy)return;
+ if(!previewReady||!viewerVisible||document.hidden||probeBusy)return;
  let moved=false;
  if(transition){const t=Math.min(1,(now-transition.start)/transition.duration),e=t*t*(3-2*t);camera.position.lerpVectors(transition.from,transition.to,e);orbit.target.lerpVectors(transition.targetFrom,transition.targetTo,e);camera.fov=THREE.MathUtils.lerp(transition.fovFrom,transition.fovTo,e);camera.updateProjectionMatrix();camera.lookAt(orbit.target);moved=true;if(t===1)transition=null;}
  else if(mode==='orbit')orbit.update();else {const steps=Math.max(1,Math.ceil(dt/.05));for(let i=0;i<steps;i++)moved=updateMovement(dt/steps)||moved;}
@@ -424,4 +432,7 @@ $('#gallery-open').addEventListener('click',()=>$('#gallery').showModal());$('#g
 $('#stream-retry').addEventListener('click',()=>location.reload());
 function measure(seconds,type){return new Promise(resolve=>{const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),mode};measurement={type,start:performance.now(),center:new THREE.Vector3(0,7,0),radius:60,height:22,quaternion:saved.quaternion};setTimeout(()=>{measurement=null;camera.position.copy(saved.position);camera.quaternion.copy(saved.quaternion);orbit.target.copy(saved.target);dirty=true;const f=diagnostics.frames.filter(x=>x.time>performance.now()-seconds*1000).slice(2),intervals=f.map(x=>x.interval).sort((a,b)=>a-b);resolve({type,seconds,frames:f.length,fps:f.length?1000/(f.reduce((s,x)=>s+x.interval,0)/f.length):0,p95FrameMs:intervals[Math.floor(intervals.length*.95)],quality,gpu:diagnostics.gpu,calls:f.at(-1)?.calls,triangles:f.at(-1)?.triangles,viewport:[innerWidth,innerHeight],pixelRatio:renderer.getPixelRatio()});},seconds*1000);});}
 window.nerida={ready:false,diagnostics,renderer,scene,camera,walker,goTo,setMode,setQuality,setLighting,collisionMeshes,measureOrbit:(seconds=10)=>measure(seconds,'orbit'),measureLook:(seconds=8)=>measure(seconds,'look')};
+
+window.neridaSetVisible=value=>{viewerVisible=!!value;delivery?.setActive(viewerVisible);if(!viewerVisible){keys.clear();moveVelocity.set(0,0,0);if(pointer.isLocked)pointer.unlock();}else{lastFrame=performance.now();dirty=true;}};
+window.addEventListener('message',event=>{if(event.source===window.parent&&event.origin===location.origin&&event.data?.type==='nerida-visibility')window.neridaSetVisible(event.data.visible);});
 requestAnimationFrame(frame);init();

@@ -1,0 +1,12 @@
+/* UI only: no canvas, renderer, texture or lighting quality overrides. */
+:root{--panel:rgba(21,30,28,.91);--line:rgba(224,215,190,.2);--accent:#e2d3ac}
+header{padding:25px 30px}.brand{font-size:26px;letter-spacing:.32em}.brand span{color:#d0c8b2}
+.panel{border-radius:12px;box-shadow:0 12px 40px #0002}.panel-title{color:#d5d0bf}
+#bookmarks button{border-radius:5px}#bookmarks button.active{background:linear-gradient(90deg,#e2d3ac29,#e2d3ac10);box-shadow:inset 2px 0 #d5c393}
+.mode-switch{border-radius:10px;padding:5px}.mode-switch button{border-radius:6px}.home-button,.floating-button{border-radius:9px}
+#loading{background:#14231e}#loading>img{animation:poster-reveal .7s ease both}.load-shade{background:linear-gradient(90deg,#071512d9 0%,#07151272 48%,#0715120a 100%),linear-gradient(0deg,#07151288,transparent 45%)}
+.loading-copy{left:8%;width:min(450px,82%)}.loading-copy h1{font-size:clamp(40px,6vw,72px);margin:23px 0 15px;letter-spacing:.27em}.loading-edition{display:block;font:10px/1.5 system-ui,sans-serif;letter-spacing:.2em;color:#e6d4aa;margin-bottom:30px}.loading-copy>p{line-height:1.9}.loading-copy .loading-note{font-size:10px;letter-spacing:.05em;color:#becabd;margin:13px 0}.progress-track{margin:31px 0 12px;height:3px;border-radius:4px;overflow:hidden}.progress-track div{background:linear-gradient(90deg,#a9bea9,#e7d7ac)}
+#stream-status{border-radius:10px;box-shadow:0 8px 30px #0003}#gallery{border-radius:13px}#gallery-grid img{border-radius:6px}#gallery-grid figcaption{line-height:1.7}
+@keyframes poster-reveal{from{opacity:.35}to{opacity:1}}
+@media(max-width:760px){header{padding:19px}.brand{font-size:19px}.loading-copy{left:7%}.loading-copy h1{font-size:43px}#stream-status{width:min(380px,calc(100vw - 28px))}}
+@media(prefers-reduced-motion:reduce){#loading>img{animation:none}}

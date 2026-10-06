@@ -1,3 +1,4 @@
+import {createDelivery} from './asset-transport.97e5c6d11fb5.js';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {DRACOLoader} from 'three/addons/loaders/DRACOLoader.js';
@@ -15,6 +16,13 @@ import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {MeshBVH,acceleratedRaycast} from 'three-mesh-bvh';
 const $=s=>document.querySelector(s), loading=$('#loading');
 const siteBase=new URL('.',import.meta.url),assetUrl=path=>new URL(path.replace(/^\/+/,''),siteBase).href;
+let delivery,viewerVisible=true;
+try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
+try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
+try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
+try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
+try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
+try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
 const diagnostics={ready:false,interactive:false,errors:[],source:null,models:[],lightmaps:0,frames:[],mode:'orbit',quality:'high',lighting:'day',probeCount:0};
 window.addEventListener('error',e=>diagnostics.errors.push(e.message));
 window.addEventListener('unhandledrejection',e=>diagnostics.errors.push(String(e.reason)));
@@ -63,7 +71,7 @@ const rooms=[
 function zUp(a){return new THREE.Vector3(a[0],a[2],-a[1]);}
 function progress(value,text){loadProgressValue=Math.max(loadProgressValue,Math.min(100,value));const pct=loadProgressValue;$('#load-progress').style.width=`${pct}%`;$('#load-status').textContent=text;const stream=$('#stream-status');if(interactive){stream.hidden=false;$('#stream-progress').style.width=`${pct}%`;$('#stream-message').textContent=text;}}
 function toast(text){$('#toast').textContent=text;$('#toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').hidden=true,4000);}
-function imageTexture(url,onProgress){if(!textures.has(url))textures.set(url,new EXRLoader().setDataType(THREE.HalfFloatType).loadAsync(assetUrl(url),onProgress).then(t=>{t.channel=1;t.flipY=false;t.repeat.set(1,-1);t.offset.y=1;t.colorSpace=THREE.LinearSRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return t;}));return textures.get(url);}
+function imageTexture(url,onProgress){if(!textures.has(url))textures.set(url,delivery.texture(url,onProgress).then(t=>{t.channel=1;t.flipY=false;t.repeat.set(1,-1);t.offset.y=1;t.colorSpace=THREE.LinearSRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return t;}));return textures.get(url);}
 function patchLightmap(m){
  m.onBeforeCompile=shader=>{
   if(m.lightMap){
@@ -198,18 +206,23 @@ function setupMirrors(){
  }
  diagnostics.planarMirrors=sources.length;diagnostics.planarReflectionPasses=mirrors.length;
 }
+async function loadModel(entry,loader,onProgress){try{return await delivery.model(entry,loader,onProgress);}catch(error){console.warn('Compressed delivery unavailable; using original model',error);return loader.loadAsync(assetUrl(entry.file),onProgress);}}
 async function init(){
  try{
   manifest=await fetch(assetUrl('manifest.json')).then(r=>{if(!r.ok)throw Error('巡覽模型尚未完成匯出');return r.json();});diagnostics.source=manifest.source_sha256;lightmapJobsExpected=Object.keys(manifest.lightmaps).length;
+  delivery=await createDelivery('v1',siteBase);
+  delivery.setActive(viewerVisible);
+  if(delivery.spec.source_sha256&&delivery.spec.source_sha256!==manifest.source_sha256)throw Error('Delivery source mismatch');
+  diagnostics.delivery=delivery.stats;diagnostics.loading={startMs:0,previewMs:null,readyMs:null};
   progress(5,'正在載入天空與材質…');
-  const hdr=await new HDRLoader().loadAsync(assetUrl('textures/sky.hdr'));hdr.mapping=THREE.EquirectangularReflectionMapping;scene.background=hdr;scene.environment=hdr;scene.backgroundRotation.y=Math.PI*2/3;scene.environmentRotation.y=Math.PI*2/3;scene.backgroundIntensity=.7;scene.environmentIntensity=.7;
+  const hdr=await delivery.hdr('textures/sky.hdr');hdr.mapping=THREE.EquirectangularReflectionMapping;scene.background=hdr;scene.environment=hdr;scene.backgroundRotation.y=Math.PI*2/3;scene.environmentRotation.y=Math.PI*2/3;scene.backgroundIntensity=.7;scene.environmentIntensity=.7;
   const draco=new DRACOLoader();draco.setDecoderPath(assetUrl('vendor/three/examples/jsm/libs/draco/gltf/'));draco.setWorkerLimit(2);
   const loader=new GLTFLoader();loader.setDRACOLoader(draco);
   const modelBytesTotal=manifest.models.reduce((sum,entry)=>sum+(entry.bytes||0),0);let modelBytesLoaded=0;
   for(let i=0;i<manifest.models.length;i++){
    const entry=manifest.models[i],label={'01 Architecture':'建築','02 Interiors':'室內家具','03 Outdoor furnishings':'戶外家具','04 Landscape':'海岸與植被','06 Lighting':'燈具'}[entry.collection]||entry.collection;
    progress(8+modelBytesLoaded/Math.max(1,modelBytesTotal)*48,`正在下載${label}模型…`);
-   const gltf=await loader.loadAsync(assetUrl(entry.file),event=>{
+   const gltf=await loadModel(entry,loader,event=>{
     const total=event.total||entry.bytes||0,loaded=event.loaded||0,ratio=total?Math.max(0,Math.min(1,loaded/total)):0;
     const value=8+(modelBytesLoaded+(entry.bytes||total)*ratio)/Math.max(1,modelBytesTotal||total)*48;
     const size=total?` · ${(loaded/1048576).toFixed(1)}/${(total/1048576).toFixed(1)} MB`:'';
@@ -224,7 +237,7 @@ async function init(){
     configureLights();setupMirrors();goTo(0,false);setQuality('high',false);$('#places').hidden=true;$('#places-open').hidden=true;$('#lighting').disabled=true;
     void pumpLightmaps();progress(Math.max(12,loadProgressValue),'正在準備建築預覽…');
     await renderer.compileAsync(scene,camera);scene.updateMatrixWorld(true);renderer.shadowMap.needsUpdate=true;displayTick++;composer.render();
-    interactive=true;diagnostics.interactive=true;window.nerida.interactive=true;loading.hidden=true;dirty=true;
+    diagnostics.loading.previewMs=performance.now()-diagnostics.loading.startMs;renderer.domElement.dataset.previewMs=String(Math.round(diagnostics.loading.previewMs));interactive=true;diagnostics.interactive=true;window.nerida.interactive=true;loading.hidden=true;dirty=true;
     progress(Math.max(13,loadProgressValue),'建築已可互動；其他模型與光照貼圖會在背景載入');
    }else void pumpLightmaps();
   }
@@ -233,14 +246,14 @@ async function init(){
   await renderer.compileAsync(scene,camera);
   scene.updateMatrixWorld(true);renderer.shadowMap.needsUpdate=true;displayTick++;composer.render();
   await buildProbes('day');
-  progress(100,'巡覽準備完成');ready=true;diagnostics.ready=true;window.nerida.ready=true;
+  progress(100,'巡覽準備完成');diagnostics.loading.readyMs=performance.now()-diagnostics.loading.startMs;renderer.domElement.dataset.readyMs=String(Math.round(diagnostics.loading.readyMs));renderer.domElement.dataset.deliveryResponseBytes=String(delivery.stats.responseBytes);renderer.domElement.dataset.deliveryCacheHits=String(delivery.stats.cacheHits);window.dispatchEvent(new Event("nerida-ready"));ready=true;diagnostics.ready=true;window.nerida.ready=true;
   loading.hidden=true;dirty=true;$('#quality').value='high';
   if(lightmapFailures.length){$('#stream-status').hidden=false;$('#stream-message').textContent=`場景已可使用，但 ${lightmapFailures.length} 張光照貼圖載入失敗；可重新載入再試。`;$('#stream-progress').style.width='100%';$('#stream-retry').hidden=false;}else $('#stream-status').hidden=true;
   console.info('NERIDA_READY',diagnostics);
  }catch(error){diagnostics.errors.push(String(error));console.error(error);probeBusy=false;dirty=true;if(interactive){$('#stream-status').hidden=false;$('#stream-message').textContent='場景部分載入失敗：'+error.message;$('#stream-progress').style.width=`${loadProgressValue}%`;$('#stream-retry').hidden=false;}else{progress(0,'載入遇到問題：'+error.message);$('#retry').hidden=false;}}
 }
 function createBookmarks(){
- rooms.forEach((r,i)=>{const b=document.createElement('button');b.innerHTML=`<span>${String(i+1).padStart(2,'0')}</span>${r[1]}`;b.dataset.index=i;b.addEventListener('click',()=>goTo(i));$('#bookmarks').append(b);const fig=document.createElement('figure');const a=document.createElement('a');a.href=assetUrl('gallery/'+r[3]);a.target='_blank';a.rel='noopener';const img=document.createElement('img');img.src=a.href;img.alt=r[1]+' — Blender Cycles 原始渲染';img.loading='lazy';a.append(img);const cap=document.createElement('figcaption');cap.textContent=String(i+1).padStart(2,'0')+' / '+r[1];fig.append(a,cap);$('#gallery-grid').append(fig);});
+ rooms.forEach((r,i)=>{const b=document.createElement('button');b.innerHTML=`<span>${String(i+1).padStart(2,'0')}</span>${r[1]}`;b.dataset.index=i;b.addEventListener('click',()=>goTo(i));$('#bookmarks').append(b);const fig=document.createElement('figure');const a=document.createElement('a');a.href=assetUrl('gallery/'+r[3]);a.target='_blank';a.rel='noopener';const img=document.createElement('img');img.src=new URL('./preview/v1_'+r[3].replace('.png','.webp'),import.meta.url).href;img.decoding='async';img.alt=r[1]+' — Blender Cycles 原始渲染';img.loading='lazy';a.append(img);const cap=document.createElement('figcaption');cap.textContent=String(i+1).padStart(2,'0')+' / '+r[1];fig.append(a,cap);$('#gallery-grid').append(fig);});
 }
 function goTo(index,animate=true){
  const r=rooms[index],data=manifest.cameras.find(c=>c.name.startsWith(r[0]));if(!data)return;
@@ -348,7 +361,7 @@ function updateMovement(dt){
 const lastPosition=new THREE.Vector3(),lastQuaternion=new THREE.Quaternion();
 function frame(now){
  requestAnimationFrame(frame);const dt=Math.min(.05,(now-lastFrame)/1000);lastFrame=now;
- if(!interactive||document.hidden||probeBusy)return;
+ if(!interactive||!viewerVisible||document.hidden||probeBusy)return;
  let moved=false;
  if(transition){const t=Math.min(1,(now-transition.start)/transition.duration),e=t*t*(3-2*t);camera.position.lerpVectors(transition.from,transition.to,e);orbit.target.lerpVectors(transition.targetFrom,transition.targetTo,e);camera.fov=THREE.MathUtils.lerp(transition.fovFrom,transition.fovTo,e);camera.updateProjectionMatrix();camera.lookAt(orbit.target);moved=true;if(t===1)transition=null;}
  else if(mode==='orbit')orbit.update();else moved=updateMovement(dt);
@@ -389,4 +402,7 @@ $('#capture').addEventListener('click',()=>{if(!interactive)return;displayTick++
 $('#gallery-open').addEventListener('click',()=>$('#gallery').showModal());$('#gallery-close').addEventListener('click',()=>$('#gallery').close());$('#retry').addEventListener('click',()=>location.reload());
 function measure(seconds,type){return new Promise(resolve=>{const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),mode};measurement={type,start:performance.now(),center:new THREE.Vector3(0,7,0),radius:60,height:22,quaternion:saved.quaternion};setTimeout(()=>{measurement=null;camera.position.copy(saved.position);camera.quaternion.copy(saved.quaternion);orbit.target.copy(saved.target);dirty=true;const f=diagnostics.frames.filter(x=>x.time>performance.now()-seconds*1000).slice(2),intervals=f.map(x=>x.interval).sort((a,b)=>a-b);resolve({type,seconds,frames:f.length,fps:f.length?1000/(f.reduce((s,x)=>s+x.interval,0)/f.length):0,p95FrameMs:intervals[Math.floor(intervals.length*.95)],quality,gpu:diagnostics.gpu,calls:f.at(-1)?.calls,triangles:f.at(-1)?.triangles,viewport:[innerWidth,innerHeight],pixelRatio:renderer.getPixelRatio()});},seconds*1000);});}
 window.nerida={ready:false,interactive:false,diagnostics,renderer,scene,camera,goTo,setMode,setQuality,setLighting,collisionMeshes,measureOrbit:(seconds=10)=>measure(seconds,'orbit'),measureLook:(seconds=8)=>measure(seconds,'look')};
+
+window.neridaSetVisible=value=>{viewerVisible=!!value;delivery?.setActive(viewerVisible);if(!viewerVisible){keys.clear();moveVelocity.set(0,0,0);if(pointer.isLocked)pointer.unlock();}else{lastFrame=performance.now();dirty=true;}};
+window.addEventListener('message',event=>{if(event.source===window.parent&&event.origin===location.origin&&event.data?.type==='nerida-visibility')window.neridaSetVisible(event.data.visible);});
 requestAnimationFrame(frame);init();

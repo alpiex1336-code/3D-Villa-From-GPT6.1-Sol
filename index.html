@@ -7,12 +7,14 @@
 <link rel="stylesheet" href="./style.css">
 <link rel="stylesheet" href="./stream-status.css?v=74dc7c5e3162">
 <script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/","three-mesh-bvh":"./vendor/bvh/build/index.module.js"}}</script>
-<link rel="stylesheet" href="./version-switch.css?v=783f42d58551">
-<script defer src="./version-switch.js"></script>
+<link rel="stylesheet" href="./version-switch.css?v=a1224a351378">
+<script defer src="./version-switch.js?v=4658df12f58b"></script>
+<link rel="preload" as="image" href="./preview/v1_01_NERIDA_Hero.webp" fetchpriority="high">
+<link rel="stylesheet" href="./experience.css?v=9d29819a5752">
 </head>
 <body>
 <main id="viewport" aria-label="NERIDA 即時 3D 巡覽"></main>
-<div id="loading" role="status" aria-live="polite"><img src="./gallery/01_NERIDA_Hero.png" alt="NERIDA 的原始 Cycles 建築渲染"><div class="load-shade"></div><div class="loading-copy"><span class="eyebrow">A RESIDENCE ABOVE THE SEA</span><h1>NERIDA</h1><p>海崖之上，走進每一個細節。</p><div class="progress-track"><div id="load-progress"></div></div><small id="load-status">正在準備巡覽場景…</small><button id="retry" hidden>重新載入</button></div></div>
+<div id="loading" role="status" aria-live="polite"><img src="./preview/v1_01_NERIDA_Hero.webp" fetchpriority="high" alt="NERIDA Version 1 原始設計全景預覽"><div class="load-shade"></div><div class="loading-copy"><span class="eyebrow">A RESIDENCE ABOVE THE SEA</span><h1>NERIDA</h1><span class="loading-edition">01 · ORIGINAL RESIDENCE</span><p>海崖之上，走進每一個細節。</p><div class="progress-track"><div id="load-progress"></div></div><p class="loading-note">全景預覽 · 正在準備完整 3D 巡覽</p><small id="load-status">正在準備巡覽場景…</small><button id="retry" hidden>重新載入</button></div></div>
 <div id="stream-status" hidden role="status" aria-live="polite"><span id="stream-message"></span><div class="stream-track"><div id="stream-progress"></div></div><button id="stream-retry" hidden>重新載入場景</button></div>
 <header><a class="brand" href="./" aria-label="NERIDA 首頁">NERIDA<span>COASTAL RESIDENCE</span></a><div class="header-right"><span class="local-indicator"><i></i>互動 3D 巡覽</span><button id="gallery-open" class="text-button">原始渲染</button><button id="settings-open" class="icon-button" aria-label="畫面與巡覽設定" title="畫面與巡覽設定"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16M8 3v6M16 9v6M10 15v6"/></svg></button></div></header>
 <aside id="places" class="panel"><div class="panel-title"><span>探索空間</span><button id="places-close" class="icon-button" aria-label="收起空間選單">−</button></div><nav id="bookmarks" aria-label="空間捷徑"></nav><div class="place-foot">28 × 12 m · 地中海海岸住宅</div></aside>
@@ -23,6 +25,6 @@
 <div id="walk-prompt" hidden><strong id="walk-mode-label">步行巡覽</strong><span>點一下畫面開始 · Esc 釋放滑鼠</span></div>
 <footer><div class="mode-switch" role="group" aria-label="巡覽方式"><button data-mode="orbit" class="active">環繞</button><button data-mode="walk">步行</button><button data-mode="fly">飛行</button></div><div id="instructions">拖曳旋轉 · 滾輪縮放 · 右鍵平移</div><button id="home" class="home-button" title="回到海崖全景">重設視角 <span>H</span></button></footer>
 <div id="stats" hidden aria-live="off"></div><div id="toast" role="status" aria-live="polite" hidden></div>
-<dialog id="gallery"><div class="gallery-head"><div><span class="eyebrow">CYCLES · ORIGINAL RENDERS</span><h2>原始高解析渲染</h2></div><button id="gallery-close" class="icon-button" aria-label="關閉原始渲染">×</button></div><p>保留 Blender 原始輸出，供畫質對照。這些是離線渲染圖片；巡覽頁面使用即時 3D。</p><div id="gallery-grid"></div></dialog>
-<script type="module" src="./app.js?v=20b1d2c028c9"></script>
+<dialog id="gallery"><div class="gallery-head"><div><span class="eyebrow">CYCLES · ORIGINAL RENDERS</span><h2>原始高解析渲染</h2></div><button id="gallery-close" class="icon-button" aria-label="關閉原始渲染">×</button></div><p>保留 Blender 原始輸出，供畫質對照。縮圖供快速瀏覽；點選可開啟未修改的原始高解析圖片。巡覽頁面使用即時 3D。</p><div id="gallery-grid"></div></dialog>
+<script type="module" src="./app.js?v=f4d093a4eac7"></script>
 </body></html>
