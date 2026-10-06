@@ -1,4 +1,4 @@
-import {createDelivery} from './asset-transport.97e5c6d11fb5.js';
+import {createDelivery} from './asset-transport.a863cb181a89.js';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {DRACOLoader} from 'three/addons/loaders/DRACOLoader.js';
@@ -17,11 +17,6 @@ import {MeshBVH,acceleratedRaycast} from 'three-mesh-bvh';
 const $=s=>document.querySelector(s), loading=$('#loading');
 const siteBase=new URL('.',import.meta.url),assetUrl=path=>new URL(path.replace(/^\/+/,''),siteBase).href;
 let delivery,viewerVisible=true;
-try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
-try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
-try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
-try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
-try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
 try{viewerVisible=(window.neridaVersions?.state.requested??1)!==2;}catch{viewerVisible=true;}
 const diagnostics={ready:false,interactive:false,errors:[],source:null,models:[],lightmaps:0,frames:[],mode:'orbit',quality:'high',lighting:'day',probeCount:0};
 window.addEventListener('error',e=>diagnostics.errors.push(e.message));

@@ -1,4 +1,4 @@
-import {createDelivery} from '../asset-transport.97e5c6d11fb5.js';
+import {createDelivery} from '../asset-transport.a863cb181a89.js';
 import {WalkController} from './navigation.js';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
@@ -20,7 +20,6 @@ const siteBase=new URL('.',import.meta.url),localAssetUrl=path=>new URL(path.rep
 const assetRoot=new URL("https://raw.githubusercontent.com/alpiex1336-code/3D-Villa-From-GPT6.1-Sol/498824bf5abcabccbc59be5a11837864eb015c6e/_assets-v2/");
 const assetUrl=path=>new URL(path.replace(/^\/+/,''),assetRoot).href;
 let delivery,viewerVisible=true;
-try{viewerVisible=window.parent===window||(window.parent.neridaVersions?.state.requested??2)===2;}catch{viewerVisible=true;}
 try{viewerVisible=window.parent===window||(window.parent.neridaVersions?.state.requested??2)===2;}catch{viewerVisible=true;}
 const diagnostics={ready:false,errors:[],source:null,models:[],lightmaps:0,frames:[],mode:'orbit',quality:'high',lighting:'day',probeCount:0};
 window.addEventListener('error',e=>diagnostics.errors.push(e.message));

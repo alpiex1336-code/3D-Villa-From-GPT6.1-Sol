@@ -1,17 +1,18 @@
+const profileVersions={"v1":"daa2c12774d7","v2":"03b6cd16e9c6"};
 import * as THREE from 'three';
 import {EXRLoader} from 'three/addons/loaders/EXRLoader.js';
 import {HDRLoader} from 'three/addons/loaders/HDRLoader.js';
-import {decodeTexture} from './texture-codec.js';
+import {decodeTexture} from './texture-codec.8ce6b4308d14.js';
 const stats={responseBytes:0,cacheHits:0,cacheWrites:0,cacheFailures:0,predecodedTextures:0,retries:0};
 const yieldUI=()=>new Promise(resolve=>setTimeout(resolve,0));
 let worker,workerId=0;const jobs=new Map();
 function decodeInWorker(buffer){
  if(typeof Worker==='undefined')return new Response(new Blob([buffer]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer().then(decodeTexture);
- if(!worker){worker=new Worker(new URL('./delivery-worker.js',import.meta.url),{type:'module'});worker.onmessage=({data})=>{const job=jobs.get(data.id);if(!job)return;jobs.delete(data.id);data.error?job.reject(Error(data.error)):job.resolve(data);};worker.onerror=event=>{for(const job of jobs.values())job.reject(Error(event.message||'Texture worker failed'));jobs.clear();worker.terminate();worker=null;};}
+ if(!worker){worker=new Worker(new URL('./delivery-worker.92b8af42e562.js',import.meta.url),{type:'module'});worker.onmessage=({data})=>{const job=jobs.get(data.id);if(!job)return;jobs.delete(data.id);data.error?job.reject(Error(data.error)):job.resolve(data);};worker.onerror=event=>{for(const job of jobs.values())job.reject(Error(event.message||'Texture worker failed'));jobs.clear();worker.terminate();worker=null;};}
  return new Promise((resolve,reject)=>{const id=++workerId;jobs.set(id,{resolve,reject});worker.postMessage({id,buffer},[buffer]);});
 }
 export async function createDelivery(version,originalRoot){
- let spec;try{const response=await fetch(new URL(`./delivery-${version}.json`,import.meta.url));if(!response.ok)throw Error('Delivery profile unavailable');spec=await response.json();}catch(error){console.warn('Using original delivery assets',error);spec={files:{},source_sha256:null};}
+ let spec;try{const response=await fetch(new URL(`./delivery-${version}.json?v=${profileVersions[version]}`,import.meta.url));if(!response.ok)throw Error('Delivery profile unavailable');spec=await response.json();}catch(error){console.warn('Using original delivery assets',error);spec={files:{},source_sha256:null};}
  let cache;try{if(globalThis.caches)cache=await caches.open('nerida-lossless-assets-v1');}catch{stats.cacheFailures++;}
  let active=true;const waiters=[];
  const waitActive=()=>active?Promise.resolve():new Promise(resolve=>waiters.push(resolve));
