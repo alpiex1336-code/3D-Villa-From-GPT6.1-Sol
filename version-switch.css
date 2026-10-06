@@ -1,9 +1,9 @@
-#nerida-version-switch{position:fixed;z-index:1100;right:0;top:50%;transform:translateY(-50%);width:142px;min-height:58px;display:flex;align-items:center;gap:12px;padding:10px 13px 10px 15px;border:1px solid rgba(222,205,166,.52);border-right:0;border-radius:16px 0 0 16px;background:rgba(24,30,28,.86);color:#f2ecdd;box-shadow:0 12px 34px rgba(4,10,9,.34);backdrop-filter:blur(16px);font:600 13px/1.1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.02em;cursor:pointer;transition:background .22s ease,box-shadow .22s ease,opacity .22s ease}
+#nerida-version-switch{position:fixed;z-index:1100;right:12px;top:50%;transform:translateY(-50%);box-sizing:border-box;width:184px;max-width:calc(100vw - 24px);min-height:58px;display:flex;align-items:center;gap:12px;padding:10px 13px 10px 15px;border:1px solid rgba(222,205,166,.52);border-radius:16px;background:rgba(24,30,28,.86);color:#f2ecdd;box-shadow:0 12px 34px rgba(4,10,9,.34);backdrop-filter:blur(16px);font:600 13px/1.1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.02em;cursor:pointer;transition:background .22s ease,box-shadow .22s ease,opacity .22s ease}
 #nerida-version-switch:hover:not(:disabled){background:rgba(39,47,42,.96);box-shadow:0 14px 38px rgba(4,10,9,.46)}
 #nerida-version-switch:focus-visible{outline:2px solid #e5d2a6;outline-offset:3px}
 #nerida-version-switch:disabled{cursor:wait;opacity:.88}
 #nerida-version-switch .nv-mark{display:grid;place-items:center;width:29px;height:29px;flex:0 0 29px;border:1px solid rgba(222,205,166,.48);border-radius:50%;font-size:10px;color:#e7d6ae}
-#nerida-version-switch .nv-copy{display:grid;gap:4px;text-align:left;white-space:nowrap}
+#nerida-version-switch .nv-copy{display:grid;min-width:0;gap:4px;text-align:left;white-space:nowrap}
 #nerida-version-switch .nv-eyebrow{font-size:9px;font-weight:500;letter-spacing:.13em;color:#cbbf9e}
 #nerida-version-status{position:fixed;z-index:1101;right:12px;top:calc(50% - 53px);width:min(270px,calc(100vw - 28px));padding:11px 13px;border:1px solid rgba(222,205,166,.35);border-radius:12px;background:rgba(24,30,28,.93);color:#f2ecdd;box-shadow:0 10px 28px rgba(4,10,9,.3);font:500 11px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backdrop-filter:blur(15px)}
 #nerida-version-status[hidden]{display:none}
@@ -18,5 +18,5 @@
 #nerida-version-divider.nv-sweep-left{left:0}
 #nerida-version-divider.nv-sweep-right{left:100%}
 #nerida-version-divider .nv-handle{position:absolute;top:50%;left:50%;display:flex;align-items:center;justify-content:center;gap:4px;width:38px;height:38px;transform:translate(-50%,-50%);border:1px solid rgba(246,235,211,.82);border-radius:50%;background:rgba(25,31,29,.82);color:#f6ebd3;box-shadow:0 0 20px rgba(0,0,0,.25);font:500 14px/1 system-ui,sans-serif}
-@media(max-width:600px){#nerida-version-switch{width:123px;min-height:52px;padding:8px 9px 8px 11px;gap:8px}#nerida-version-switch .nv-mark{width:26px;height:26px;flex-basis:26px}#nerida-version-status{right:8px;top:calc(50% - 47px)}}
+@media(max-width:600px){#nerida-version-switch{right:max(8px,env(safe-area-inset-right));width:176px;max-width:calc(100vw - 16px);min-height:52px;padding:8px 9px 8px 11px;gap:8px}#nerida-version-switch .nv-mark{width:26px;height:26px;flex-basis:26px}#nerida-version-status{right:8px;top:calc(50% - 47px)}}
 @media(prefers-reduced-motion:reduce){#nerida-version-switch,#nerida-v2-frame,#nerida-version-divider,#nerida-version-status .nv-fill{transition-duration:.01ms!important}}
