@@ -1,0 +1,6 @@
+#stream-status{position:fixed;z-index:15;top:76px;left:50%;transform:translateX(-50%);width:min(430px,calc(100vw - 28px));padding:12px 16px;border:1px solid var(--line);border-radius:6px;background:var(--panel);backdrop-filter:blur(16px);box-shadow:0 8px 30px #0005}
+#stream-message{display:block;color:#e4e1d4;font-size:11px;line-height:1.55}
+.stream-track{height:2px;margin-top:8px;background:#a0a48e55}
+.stream-track div{height:100%;width:0;background:#e7dfc3;transition:width .25s}
+#stream-retry{margin-top:9px;padding:7px 10px;border:1px solid var(--line);border-radius:4px;font-size:11px}
+@media(max-width:760px){#stream-status{top:70px;padding:10px 12px}}

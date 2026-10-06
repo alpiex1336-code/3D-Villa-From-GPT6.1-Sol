@@ -15,7 +15,7 @@ import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {MeshBVH,acceleratedRaycast} from 'three-mesh-bvh';
 const $=s=>document.querySelector(s), loading=$('#loading');
 const siteBase=new URL('.',import.meta.url),assetUrl=path=>new URL(path.replace(/^\/+/,''),siteBase).href;
-const diagnostics={ready:false,errors:[],source:null,models:[],lightmaps:0,frames:[],mode:'orbit',quality:'high',lighting:'day',probeCount:0};
+const diagnostics={ready:false,interactive:false,errors:[],source:null,models:[],lightmaps:0,frames:[],mode:'orbit',quality:'high',lighting:'day',probeCount:0};
 window.addEventListener('error',e=>diagnostics.errors.push(e.message));
 window.addEventListener('unhandledrejection',e=>diagnostics.errors.push(String(e.reason)));
 const scene=new THREE.Scene();scene.background=new THREE.Color('#a7bfc1');
@@ -40,10 +40,12 @@ sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-58
 const areaLights=[];
 const raycaster=new THREE.Raycaster(),floorCaster=new THREE.Raycaster();raycaster.firstHitOnly=true;floorCaster.firstHitOnly=true;
 const collisionMeshes=[], materials=new Set(), lightmapMaterials=[];
+const pendingLightmaps=[],lightmapJobs=new Map(),lightmapFailures=[];
+let lightmapJobsComplete=0,lightmapJobsExpected=0,lightmapPump=null,loadProgressValue=0;
 const textures=new Map(),envTargets=[],reflectionMaps={day:[],night:[]};
 const mirrors=[];let reflectionDepth=0,displayTick=0;
 let lightingBusy=false,pendingLighting=null;
-let manifest,mode='orbit',quality='high',light='day',speed=2.5,dirty=true,movingUntil=0,lastFrame=performance.now(),lastRendered=0,lastStats=0,transition=null,ready=false,probeBusy=false,measurement=null;
+let manifest,mode='orbit',quality='high',light='day',speed=2.5,dirty=true,movingUntil=0,lastFrame=performance.now(),lastRendered=0,lastStats=0,transition=null,ready=false,interactive=false,probeBusy=false,measurement=null;
 const keys=new Set(),moveVelocity=new THREE.Vector3();
 const v1=new THREE.Vector3(),v2=new THREE.Vector3(),v3=new THREE.Vector3();
 const rooms=[
@@ -59,9 +61,9 @@ const rooms=[
  ['02 COURTYARD','暮色庭院','暖色室內光照與暮色中的泳池。','02_NERIDA_Blue_Hour.png','night']
 ];
 function zUp(a){return new THREE.Vector3(a[0],a[2],-a[1]);}
-function progress(value,text){$('#load-progress').style.width=`${Math.min(100,value)}%`;$('#load-status').textContent=text;}
+function progress(value,text){loadProgressValue=Math.max(loadProgressValue,Math.min(100,value));const pct=loadProgressValue;$('#load-progress').style.width=`${pct}%`;$('#load-status').textContent=text;const stream=$('#stream-status');if(interactive){stream.hidden=false;$('#stream-progress').style.width=`${pct}%`;$('#stream-message').textContent=text;}}
 function toast(text){$('#toast').textContent=text;$('#toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').hidden=true,4000);}
-function imageTexture(url){if(!textures.has(url))textures.set(url,new EXRLoader().setDataType(THREE.HalfFloatType).loadAsync(assetUrl(url)).then(t=>{t.channel=1;t.flipY=false;t.repeat.set(1,-1);t.offset.y=1;t.colorSpace=THREE.LinearSRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return t;}));return textures.get(url);}
+function imageTexture(url,onProgress){if(!textures.has(url))textures.set(url,new EXRLoader().setDataType(THREE.HalfFloatType).loadAsync(assetUrl(url),onProgress).then(t=>{t.channel=1;t.flipY=false;t.repeat.set(1,-1);t.offset.y=1;t.colorSpace=THREE.LinearSRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return t;}));return textures.get(url);}
 function patchLightmap(m){
  m.onBeforeCompile=shader=>{
   if(m.lightMap){
@@ -85,7 +87,42 @@ function patchLightmap(m){
  m.customProgramCacheKey=()=> 'nerida-pbr-v2-'+!!m.lightMap+'-'+!!m.userData.nativeCubeAtlas;
 }
 
-async function setupMesh(o){
+function queueLightmap(m,batch,label){
+ const file=manifest.lightmaps[batch]?.day;if(!file)return;
+ let job=lightmapJobs.get(file);
+ if(!job){job={file,batch,label,materials:[],texture:null};lightmapJobs.set(file,job);pendingLightmaps.push(job);}
+ if(job.texture){m.lightMap=job.texture;m.lightMapIntensity=Math.PI;patchLightmap(m);m.needsUpdate=true;lightmapMaterials.push({m,batch});}
+ else job.materials.push(m);
+}
+async function pumpLightmaps(){
+ if(lightmapPump){await lightmapPump;if(pendingLightmaps.length)await pumpLightmaps();return;}
+ const running=(async()=>{
+  while(pendingLightmaps.length){
+   const jobs=pendingLightmaps.splice(0,8);
+   await Promise.all(jobs.map(async job=>{
+    try{
+     const texture=await imageTexture(job.file,event=>{
+      if(!event.lengthComputable||!event.total)return;
+      const ratio=Math.max(0,Math.min(1,event.loaded/event.total));
+      const value=14+(lightmapJobsComplete+ratio)/Math.max(1,lightmapJobsExpected)*67;
+      const file=job.file.split('/').at(-1);
+      progress(value,`正在載入${job.label}光照貼圖 ${lightmapJobsComplete}/${lightmapJobsExpected} · ${file} ${Math.round(ratio*100)}%`);
+     });
+     job.texture=texture;
+     for(const m of job.materials){m.lightMap=texture;m.lightMapIntensity=Math.PI;patchLightmap(m);m.needsUpdate=true;lightmapMaterials.push({m,batch:job.batch});}
+     diagnostics.lightmaps+=job.materials.length;dirty=true;displayTick++;
+    }catch(error){lightmapFailures.push({file:job.file,error:String(error)});diagnostics.errors.push(String(error));}
+    lightmapJobsComplete++;
+    const value=14+lightmapJobsComplete/Math.max(1,lightmapJobsExpected)*67;
+    progress(value,`日間光照貼圖 ${lightmapJobsComplete}/${lightmapJobsExpected}${lightmapFailures.length?` · ${lightmapFailures.length} 張失敗`:''}`);
+   }));
+  }
+ })();
+ lightmapPump=running;
+ try{await running;}finally{if(lightmapPump===running)lightmapPump=null;}
+ if(pendingLightmaps.length)await pumpLightmaps();
+}
+async function setupMesh(o,label){
  if(!o.isMesh)return;
  o.castShadow=true;o.receiveShadow=true;
  if(o.isInstancedMesh){o.computeBoundingSphere();o.computeBoundingBox();}
@@ -98,9 +135,7 @@ async function setupMesh(o){
   if(m.name.includes('Architectural glass')){m.thickness=.012;m.ior=1.46;m.roughness=.012;m.envMapIntensity=1;}
   if(m.name.includes('Pool water')||m.name.includes('Mediterranean sea'))addWaterNormal(m);
   const batch=m.userData?.lightmap_batch;
-  if(batch && manifest.lightmaps[batch]){
-   m.aoMap=null;m.lightMap=await imageTexture(manifest.lightmaps[batch].day);m.lightMapIntensity=Math.PI;patchLightmap(m);lightmapMaterials.push({m,batch});diagnostics.lightmaps++;
-  }
+  if(batch&&manifest.lightmaps[batch]){m.aoMap=null;queueLightmap(m,batch,label);}
  }
  // Ray collision is geometry-based, including glazing, openings and stairs.
  if(!o.isInstancedMesh && (o.userData?.source_collection==='01 Architecture'||o.parent?.userData?.source_collection==='01 Architecture'||ms.some(m=>m.userData?.lightmap_batch&&o.name.startsWith('WEB_BATCH')))){
@@ -154,7 +189,7 @@ function setupMirrors(){
    }return false;
   }
   const render=mirror.onBeforeRender;mirror.onBeforeRender=function(...args){
-   if(probeBusy||reflectionDepth||!ready||lastTick===displayTick||!visibleSurface(args[2]))return;
+   if(probeBusy||reflectionDepth||!interactive||lastTick===displayTick||!visibleSurface(args[2]))return;
    lastTick=displayTick;
    const hidden=[];for(const m of materials)if(m.name.includes('Silver mirror')){hidden.push([m,m.visible]);m.visible=false;}
    reflectionDepth++;try{render.apply(this,args);}finally{for(const [m,v]of hidden)m.visible=v;reflectionDepth--;}
@@ -165,28 +200,44 @@ function setupMirrors(){
 }
 async function init(){
  try{
-  manifest=await fetch(assetUrl('manifest.json')).then(r=>{if(!r.ok)throw Error('巡覽模型尚未完成匯出');return r.json();});diagnostics.source=manifest.source_sha256;
+  manifest=await fetch(assetUrl('manifest.json')).then(r=>{if(!r.ok)throw Error('巡覽模型尚未完成匯出');return r.json();});diagnostics.source=manifest.source_sha256;lightmapJobsExpected=Object.keys(manifest.lightmaps).length;
   progress(5,'正在載入天空與材質…');
   const hdr=await new HDRLoader().loadAsync(assetUrl('textures/sky.hdr'));hdr.mapping=THREE.EquirectangularReflectionMapping;scene.background=hdr;scene.environment=hdr;scene.backgroundRotation.y=Math.PI*2/3;scene.environmentRotation.y=Math.PI*2/3;scene.backgroundIntensity=.7;scene.environmentIntensity=.7;
   const draco=new DRACOLoader();draco.setDecoderPath(assetUrl('vendor/three/examples/jsm/libs/draco/gltf/'));draco.setWorkerLimit(2);
   const loader=new GLTFLoader();loader.setDRACOLoader(draco);
+  const modelBytesTotal=manifest.models.reduce((sum,entry)=>sum+(entry.bytes||0),0);let modelBytesLoaded=0;
   for(let i=0;i<manifest.models.length;i++){
-   const entry=manifest.models[i];progress(10+i/manifest.models.length*70,`正在載入${{'01 Architecture':'建築','02 Interiors':'室內家具','03 Outdoor furnishings':'戶外家具','04 Landscape':'海岸與植被','06 Lighting':'燈具'}[entry.collection]}…`);
-   const gltf=await loader.loadAsync(assetUrl(entry.file));scene.add(gltf.scene);gltf.scene.updateMatrixWorld(true);if(entry.collection==='04 Landscape')spatialInstances(gltf.scene);
+   const entry=manifest.models[i],label={'01 Architecture':'建築','02 Interiors':'室內家具','03 Outdoor furnishings':'戶外家具','04 Landscape':'海岸與植被','06 Lighting':'燈具'}[entry.collection]||entry.collection;
+   progress(8+modelBytesLoaded/Math.max(1,modelBytesTotal)*48,`正在下載${label}模型…`);
+   const gltf=await loader.loadAsync(assetUrl(entry.file),event=>{
+    const total=event.total||entry.bytes||0,loaded=event.loaded||0,ratio=total?Math.max(0,Math.min(1,loaded/total)):0;
+    const value=8+(modelBytesLoaded+(entry.bytes||total)*ratio)/Math.max(1,modelBytesTotal||total)*48;
+    const size=total?` · ${(loaded/1048576).toFixed(1)}/${(total/1048576).toFixed(1)} MB`:'';
+    progress(value,`正在下載${label}模型 ${total?Math.round(ratio*100)+'%':''}${size}`);
+   });
+   modelBytesLoaded+=entry.bytes||0;scene.add(gltf.scene);gltf.scene.updateMatrixWorld(true);if(entry.collection==='04 Landscape')spatialInstances(gltf.scene);
    const meshes=[];gltf.scene.traverse(o=>{if(o.isMesh)meshes.push(o);});
-   // Limit simultaneous EXR decode allocations.
-   for(let j=0;j<meshes.length;j+=8)await Promise.all(meshes.slice(j,j+8).map(setupMesh));
+   progress(8+modelBytesLoaded/Math.max(1,modelBytesTotal)*48,`正在整理${label}模型與碰撞…`);
+   for(let j=0;j<meshes.length;j+=8)await Promise.all(meshes.slice(j,j+8).map(o=>setupMesh(o,label)));
    diagnostics.models.push({file:entry.file,meshes:meshes.length,bytes:entry.bytes});
+   if(i===0){
+    configureLights();setupMirrors();goTo(0,false);setQuality('high',false);$('#places').hidden=true;$('#places-open').hidden=true;$('#lighting').disabled=true;
+    void pumpLightmaps();progress(Math.max(12,loadProgressValue),'正在準備建築預覽…');
+    await renderer.compileAsync(scene,camera);scene.updateMatrixWorld(true);renderer.shadowMap.needsUpdate=true;displayTick++;composer.render();
+    interactive=true;diagnostics.interactive=true;window.nerida.interactive=true;loading.hidden=true;dirty=true;
+    progress(Math.max(13,loadProgressValue),'建築已可互動；其他模型與光照貼圖會在背景載入');
+   }else void pumpLightmaps();
   }
-  draco.dispose();configureLights();setupMirrors();createBookmarks();goTo(0,false);setQuality('high',false);
+  draco.dispose();await pumpLightmaps();createBookmarks();$('#places').hidden=false;$('#places-open').hidden=true;$('#lighting').disabled=false;goTo(0,false);setQuality('high',false);
   progress(88,'正在準備反射與陰影…');
   await renderer.compileAsync(scene,camera);
   scene.updateMatrixWorld(true);renderer.shadowMap.needsUpdate=true;displayTick++;composer.render();
   await buildProbes('day');
   progress(100,'巡覽準備完成');ready=true;diagnostics.ready=true;window.nerida.ready=true;
   loading.hidden=true;dirty=true;$('#quality').value='high';
+  if(lightmapFailures.length){$('#stream-status').hidden=false;$('#stream-message').textContent=`場景已可使用，但 ${lightmapFailures.length} 張光照貼圖載入失敗；可重新載入再試。`;$('#stream-progress').style.width='100%';$('#stream-retry').hidden=false;}else $('#stream-status').hidden=true;
   console.info('NERIDA_READY',diagnostics);
- }catch(error){diagnostics.errors.push(String(error));console.error(error);progress(0,'載入遇到問題：'+error.message);$('#retry').hidden=false;}
+ }catch(error){diagnostics.errors.push(String(error));console.error(error);probeBusy=false;dirty=true;if(interactive){$('#stream-status').hidden=false;$('#stream-message').textContent='場景部分載入失敗：'+error.message;$('#stream-progress').style.width=`${loadProgressValue}%`;$('#stream-retry').hidden=false;}else{progress(0,'載入遇到問題：'+error.message);$('#retry').hidden=false;}}
 }
 function createBookmarks(){
  rooms.forEach((r,i)=>{const b=document.createElement('button');b.innerHTML=`<span>${String(i+1).padStart(2,'0')}</span>${r[1]}`;b.dataset.index=i;b.addEventListener('click',()=>goTo(i));$('#bookmarks').append(b);const fig=document.createElement('figure');const a=document.createElement('a');a.href=assetUrl('gallery/'+r[3]);a.target='_blank';a.rel='noopener';const img=document.createElement('img');img.src=a.href;img.alt=r[1]+' — Blender Cycles 原始渲染';img.loading='lazy';a.append(img);const cap=document.createElement('figcaption');cap.textContent=String(i+1).padStart(2,'0')+' / '+r[1];fig.append(a,cap);$('#gallery-grid').append(fig);});
@@ -196,7 +247,7 @@ function goTo(index,animate=true){
  if(pointer.isLocked)pointer.unlock();
  const position=zUp(data.position),direction=zUp(data.direction),look=position.clone().addScaledVector(direction,index===0||index===1||index===8?60:7);
  const vfov=THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(data.fov_horizontal/2)/Math.max(camera.aspect,1.5)));
- if(animate&&ready)transition={start:performance.now(),duration:1000,from:camera.position.clone(),to:position,targetFrom:orbit.target.clone(),targetTo:look,fovFrom:camera.fov,fovTo:vfov};
+ if(animate&&interactive)transition={start:performance.now(),duration:1000,from:camera.position.clone(),to:position,targetFrom:orbit.target.clone(),targetTo:look,fovFrom:camera.fov,fovTo:vfov};
  else{camera.position.copy(position);orbit.target.copy(look);camera.fov=vfov;camera.lookAt(look);camera.updateProjectionMatrix();}
  $('#view-number').textContent=String(index+1).padStart(2,'0')+' / 10';$('#view-title').textContent=r[1];$('#view-description').textContent=r[2];
  document.querySelectorAll('#bookmarks button').forEach(b=>b.classList.toggle('active',+b.dataset.index===index));
@@ -245,7 +296,7 @@ function setQuality(next,announce=true){
  if(announce)toast('畫面品質：'+{high:'高保真',balanced:'平衡',performance:'流暢'}[next]+'，模型細節維持完整');
 }
 function setMode(next){
- if(!ready)return;if(pointer.isLocked)pointer.unlock();mode=next;diagnostics.mode=next;keys.clear();moveVelocity.set(0,0,0);orbit.enabled=next==='orbit';transition=null;
+ if(!interactive)return;if(pointer.isLocked)pointer.unlock();mode=next;diagnostics.mode=next;keys.clear();moveVelocity.set(0,0,0);orbit.enabled=next==='orbit';transition=null;
  document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===next));
  $('#walk-prompt').hidden=next==='orbit';$('#walk-mode-label').textContent=next==='walk'?'步行巡覽':'自由飛行';
  $('#instructions').textContent=next==='orbit'?'拖曳旋轉 · 滾輪縮放 · 右鍵平移':next==='walk'?'WASD 移動 · Shift 加速 · Esc 釋放滑鼠':'WASD 移動 · E / Q 升降 · Shift 加速 · Esc 釋放滑鼠';
@@ -297,7 +348,7 @@ function updateMovement(dt){
 const lastPosition=new THREE.Vector3(),lastQuaternion=new THREE.Quaternion();
 function frame(now){
  requestAnimationFrame(frame);const dt=Math.min(.05,(now-lastFrame)/1000);lastFrame=now;
- if(!ready||document.hidden||probeBusy)return;
+ if(!interactive||document.hidden||probeBusy)return;
  let moved=false;
  if(transition){const t=Math.min(1,(now-transition.start)/transition.duration),e=t*t*(3-2*t);camera.position.lerpVectors(transition.from,transition.to,e);orbit.target.lerpVectors(transition.targetFrom,transition.targetTo,e);camera.fov=THREE.MathUtils.lerp(transition.fovFrom,transition.fovTo,e);camera.updateProjectionMatrix();camera.lookAt(orbit.target);moved=true;if(t===1)transition=null;}
  else if(mode==='orbit')orbit.update();else moved=updateMovement(dt);
@@ -312,7 +363,7 @@ function frame(now){
   $('#stats').innerHTML=`${f.length?Math.round(1000/mean)+' FPS（巡覽）':'靜止 · 按需渲染'}<br>${last?.calls||0} draw calls<br>${((last?.triangles||0)/1e6).toFixed(2)}M triangles / frame<br>${renderer.getPixelRatio().toFixed(2)}× · ${mode}`;
  }
 }
-renderer.domElement.addEventListener('pointerdown',e=>{if(mode!=='orbit'&&ready&&!pointer.isLocked&&e.pointerType==='mouse')pointer.lock();});
+renderer.domElement.addEventListener('pointerdown',e=>{if(mode!=='orbit'&&interactive&&!pointer.isLocked&&e.pointerType==='mouse')pointer.lock();});
 $('#walk-prompt').addEventListener('click',()=>pointer.lock());
 pointer.addEventListener('lock',()=>{document.body.classList.add('locked');$('#walk-prompt').hidden=true;$('#crosshair').hidden=false;dirty=true;});
 pointer.addEventListener('unlock',()=>{document.body.classList.remove('locked');$('#crosshair').hidden=true;$('#walk-prompt').hidden=mode==='orbit';keys.clear();moveVelocity.set(0,0,0);});
@@ -331,11 +382,11 @@ document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',(
 $('#home').addEventListener('click',()=>{setMode('orbit');goTo(0);});
 $('#settings-open').addEventListener('click',()=>$('#settings').hidden=!$('#settings').hidden);$('#settings-close').addEventListener('click',()=>$('#settings').hidden=true);
 $('#places-close').addEventListener('click',()=>{$('#places').hidden=true;$('#places-open').hidden=false;});$('#places-open').addEventListener('click',()=>{$('#places').hidden=false;$('#places-open').hidden=true;});
-$('#quality').addEventListener('change',e=>setQuality(e.target.value));$('#lighting').addEventListener('change',e=>setLighting(e.target.value));
+$('#quality').addEventListener('change',e=>setQuality(e.target.value));$('#lighting').addEventListener('change',e=>setLighting(e.target.value));$('#stream-retry').addEventListener('click',()=>location.reload());
 $('#speed').addEventListener('input',e=>{speed=+e.target.value;$('#speed-value').textContent=speed.toFixed(1)+' m/s';});$('#show-stats').addEventListener('change',e=>$('#stats').hidden=!e.target.checked);
 $('#fullscreen').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{toast('此瀏覽器未提供全螢幕模式');}});
-$('#capture').addEventListener('click',()=>{if(!ready)return;displayTick++;composer.render();renderer.domElement.toBlob(blob=>{if(!blob)return;const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download='NERIDA_'+light+'_'+new Date().toISOString().replace(/[:.]/g,'-')+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('目前畫面已儲存');});});
+$('#capture').addEventListener('click',()=>{if(!interactive)return;displayTick++;composer.render();renderer.domElement.toBlob(blob=>{if(!blob)return;const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download='NERIDA_'+light+'_'+new Date().toISOString().replace(/[:.]/g,'-')+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('目前畫面已儲存');});});
 $('#gallery-open').addEventListener('click',()=>$('#gallery').showModal());$('#gallery-close').addEventListener('click',()=>$('#gallery').close());$('#retry').addEventListener('click',()=>location.reload());
 function measure(seconds,type){return new Promise(resolve=>{const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),mode};measurement={type,start:performance.now(),center:new THREE.Vector3(0,7,0),radius:60,height:22,quaternion:saved.quaternion};setTimeout(()=>{measurement=null;camera.position.copy(saved.position);camera.quaternion.copy(saved.quaternion);orbit.target.copy(saved.target);dirty=true;const f=diagnostics.frames.filter(x=>x.time>performance.now()-seconds*1000).slice(2),intervals=f.map(x=>x.interval).sort((a,b)=>a-b);resolve({type,seconds,frames:f.length,fps:f.length?1000/(f.reduce((s,x)=>s+x.interval,0)/f.length):0,p95FrameMs:intervals[Math.floor(intervals.length*.95)],quality,gpu:diagnostics.gpu,calls:f.at(-1)?.calls,triangles:f.at(-1)?.triangles,viewport:[innerWidth,innerHeight],pixelRatio:renderer.getPixelRatio()});},seconds*1000);});}
-window.nerida={ready:false,diagnostics,renderer,scene,camera,goTo,setMode,setQuality,setLighting,collisionMeshes,measureOrbit:(seconds=10)=>measure(seconds,'orbit'),measureLook:(seconds=8)=>measure(seconds,'look')};
+window.nerida={ready:false,interactive:false,diagnostics,renderer,scene,camera,goTo,setMode,setQuality,setLighting,collisionMeshes,measureOrbit:(seconds=10)=>measure(seconds,'orbit'),measureLook:(seconds=8)=>measure(seconds,'look')};
 requestAnimationFrame(frame);init();
