@@ -31,7 +31,7 @@ const adapter={
   next.style.visibility='visible';next.inert=false;next.setAttribute('aria-hidden','false');next.contentWindow.neridaSetVisible(true);
   if(!cover.hidden&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
    const right=version===2;divider.hidden=false;
-   const options={duration:1200,easing:'cubic-bezier(.25,.7,.25,1)',fill:'forwards'};
+   const options={duration:2400,easing:'cubic-bezier(.25,.7,.25,1)',fill:'forwards'};
    const wipe=cover.animate([{clipPath:'inset(0)'},{clipPath:right?'inset(0 100% 0 0)':'inset(0 0 0 100%)'}],options);
    const line=divider.animate([{left:right?'100%':'0%'},{left:right?'0%':'100%'}],options);
    await Promise.allSettled([wipe.finished,line.finished]);wipe.cancel();line.cancel();divider.hidden=true;
