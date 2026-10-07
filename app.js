@@ -1,3 +1,4 @@
+import {createGILoader,releaseLighting} from './lighting-memory.ca64dc812b1f.js';
 import {releaseResources} from './viewer-lifecycle.640f856397fa.js';
 import {releaseUploadedPixels} from './resident-textures.e8d6de2920a4.js';
 import {createDelivery} from './asset-transport.f8fb4ec56162.js';
@@ -51,7 +52,7 @@ let lightmapJobsComplete=0,lightmapJobsExpected=0,lightmapPump=null,loadProgress
 const textures=new Map(),envTargets=[],reflectionMaps={day:[],night:[]};
 const mirrors=[];let reflectionDepth=0,displayTick=0;
 let lightingBusy=false,pendingLighting=null;
-let manifest,mode='orbit',quality='high',light='day',speed=2.5,dirty=true,movingUntil=0,lastFrame=performance.now(),lastRendered=0,lastStats=0,transition=null,ready=false,interactive=false,probeBusy=false,measurement=null;
+let manifest,mode='orbit',quality='high',light=new URLSearchParams(location.search).get('lighting')==='night'?'night':'day',speed=2.5,dirty=true,movingUntil=0,lastFrame=performance.now(),lastRendered=0,lastStats=0,transition=null,ready=false,interactive=false,probeBusy=false,measurement=null;
 const keys=new Set(),moveVelocity=new THREE.Vector3();
 const v1=new THREE.Vector3(),v2=new THREE.Vector3(),v3=new THREE.Vector3();
 const rooms=[
@@ -69,7 +70,9 @@ const rooms=[
 function zUp(a){return new THREE.Vector3(a[0],a[2],-a[1]);}
 function progress(value,text){notifyHost('progress',{value,text});loadProgressValue=Math.max(loadProgressValue,Math.min(100,value));const pct=loadProgressValue;$('#load-progress').style.width=`${pct}%`;$('#load-status').textContent=text;const stream=$('#stream-status');if(interactive){stream.hidden=false;$('#stream-progress').style.width=`${pct}%`;$('#stream-message').textContent=text;}}
 function toast(text){$('#toast').textContent=text;$('#toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').hidden=true,4000);}
-function imageTexture(url,onProgress){if(!textures.has(url))textures.set(url,delivery.texture(url,onProgress).then(t=>{t.channel=1;t.flipY=false;t.repeat.set(1,-1);t.offset.y=1;t.colorSpace=THREE.LinearSRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return releaseUploadedPixels(t,bytes=>{diagnostics.releasedPixelBytes=(diagnostics.releasedPixelBytes||0)+bytes;});}));return textures.get(url);}
+// NERIDA_MEMORY_POLICY_V1
+const imageTexture=createGILoader({textures,load:(url,onProgress)=>delivery.texture(url,onProgress),isDisposed:()=>viewerDisposed,configure(t){t.channel=1;t.flipY=false;t.repeat.set(1,-1);t.offset.y=1;t.colorSpace=THREE.LinearSRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());releaseUploadedPixels(t,bytes=>{diagnostics.releasedPixelBytes=(diagnostics.releasedPixelBytes||0)+bytes;});},upload:t=>renderer.initTexture(t),onUploaded(t){if(renderer.getContext().isContextLost())throw Error('繪圖資源不足，請重試');diagnostics.giUploaded=(diagnostics.giUploaded||0)+1;}});
+
 function patchLightmap(m){
  m.onBeforeCompile=shader=>{
   if(m.lightMap){
@@ -94,7 +97,7 @@ function patchLightmap(m){
 }
 
 function queueLightmap(m,batch,label){
- const file=manifest.lightmaps[batch]?.day;if(!file)return;
+ const file=manifest.lightmaps[batch]?.[light];if(!file)return;
  let job=lightmapJobs.get(file);
  if(!job){job={file,batch,label,materials:[],texture:null};lightmapJobs.set(file,job);pendingLightmaps.push(job);}
  if(job.texture){m.lightMap=job.texture;m.lightMapIntensity=Math.PI;patchLightmap(m);m.needsUpdate=true;lightmapMaterials.push({m,batch});}
@@ -120,7 +123,7 @@ async function pumpLightmaps(){
     }catch(error){lightmapFailures.push({file:job.file,error:String(error)});diagnostics.errors.push(String(error));}
     lightmapJobsComplete++;
     const value=14+lightmapJobsComplete/Math.max(1,lightmapJobsExpected)*67;
-    progress(value,`日間光照貼圖 ${lightmapJobsComplete}/${lightmapJobsExpected}${lightmapFailures.length?` · ${lightmapFailures.length} 張失敗`:''}`);
+    progress(value,`光照貼圖 ${lightmapJobsComplete}/${lightmapJobsExpected}${lightmapFailures.length?` · ${lightmapFailures.length} 張失敗`:''}`);
    }));
   }
  })();
@@ -243,7 +246,7 @@ async function init(){
   progress(88,'正在準備反射與陰影…');
   await renderer.compileAsync(scene,camera);
   scene.updateMatrixWorld(true);renderer.shadowMap.needsUpdate=true;displayTick++;composer.render();
-  await buildProbes('day');
+  applyLightingState(light);await buildProbes(light);
   progress(100,'巡覽準備完成');diagnostics.loading.readyMs=performance.now()-diagnostics.loading.startMs;renderer.domElement.dataset.readyMs=String(Math.round(diagnostics.loading.readyMs));renderer.domElement.dataset.deliveryResponseBytes=String(delivery.stats.responseBytes);renderer.domElement.dataset.deliveryCacheHits=String(delivery.stats.cacheHits);window.dispatchEvent(new Event("nerida-ready"));ready=true;diagnostics.ready=true;window.nerida.ready=true;
   loading.hidden=true;dirty=true;$('#quality').value='high';
   if(lightmapFailures.length){$('#stream-status').hidden=false;$('#stream-message').textContent=`場景已可使用，但 ${lightmapFailures.length} 張光照貼圖載入失敗；可重新載入再試。`;$('#stream-progress').style.width='100%';$('#stream-retry').hidden=false;}else $('#stream-status').hidden=true;
@@ -280,23 +283,44 @@ function assignProbes(variant){
   for(const m of Array.isArray(o.material)?o.material:[o.material])if(m.metalness>.3||m.transmission>.1){m.envMap=probe.texture;m.envMapIntensity=.75;m.needsUpdate=true;}
  });
 }
-async function setLighting(next){
- if(!ready)return;
- if(lightingBusy||probeBusy){pendingLighting=next;return;}
- if(next===light)return;lightingBusy=true;
- $('#lighting').disabled=true;toast('正在切換光照…');
- try{
-  // Load first; commit all scene state together after decoding completes.
-  const maps=await Promise.all(lightmapMaterials.map(({batch})=>imageTexture(manifest.lightmaps[batch][next])));
+function applyLightingState(next){
   light=next;diagnostics.lighting=next;
-  lightmapMaterials.forEach(({m},i)=>{m.lightMap=maps[i];m.needsUpdate=true;});
   scene.backgroundIntensity=next==='day'?.7:.11;scene.environmentIntensity=next==='day'?.7:.16;worldLight.intensity=next==='day'?.25:.08;
   sun.intensity=next==='day'?2.5:.05;sun.color.setRGB(...(next==='day'?[1,.88,.69]:[.48,.58,1]));
   for(const a of areaLights)a.intensity=a.userData.baseIntensity*(next==='day'?1:1.8);
   renderer.toneMappingExposure=next==='day'?1.035:1.516;sun.shadow.needsUpdate=true;
-  await buildProbes(next);$('#lighting').value=next;dirty=true;toast(next==='day'?'日間光照':'暮色光照');
- }catch(e){diagnostics.errors.push(String(e));toast('光照載入失敗，請重新載入頁面');}finally{$('#lighting').disabled=false;lightingBusy=false;const pending=pendingLighting;pendingLighting=null;if(pending&&pending!==light)await setLighting(pending);}
+ $('#lighting').value=next;
 }
+let lightingCover=null;
+async function freezeLightingFrame(){
+ if(lightingCover)return lightingCover;
+ displayTick++;composer.render();
+ const blob=await new Promise(resolve=>renderer.domElement.toBlob(resolve,'image/png'));
+ if(!blob)throw Error('無法保存光照切換預覽');
+ const url=URL.createObjectURL(blob),overlay=document.createElement('div'),image=document.createElement('img'),retry=document.createElement('button');
+ image.src=url;await image.decode();image.style.cssText='width:100%;height:100%;object-fit:cover';overlay.style.cssText='position:absolute;inset:0;z-index:4;pointer-events:auto';retry.type='button';retry.hidden=true;retry.textContent='重試光照';retry.style.cssText='position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:14px 24px;border:1px solid #d3c69d;border-radius:10px;background:#172721;color:#eee5c8;font:inherit;cursor:pointer';overlay.append(image,retry);$('#viewport').append(overlay);
+ lightingCover={retry,visibleBefore:viewerVisible,remove(){overlay.remove();URL.revokeObjectURL(url);lightingCover=null;}};return lightingCover;
+}
+async function setLighting(next){
+ if(!ready||viewerDisposed||!['day','night'].includes(next))return;
+ if(lightingBusy||probeBusy){pendingLighting=next;return;}
+ if(next===light)return;lightingBusy=true;
+ const visibleBefore=viewerVisible;let snapshot=null;
+ $('#lighting').disabled=true;toast('正在準備完整光照…');
+ try{
+  snapshot=await freezeLightingFrame();window.neridaSetVisible(false);snapshot.retry.hidden=true;
+  await releaseLighting({textures,bindings:lightmapMaterials,materials,targets:envTargets,reflections:reflectionMaps});
+  for(const job of lightmapJobs.values())job.texture=null;
+  light='unavailable';
+  const batches=[...new Set(lightmapMaterials.map(x=>x.batch))],maps=new Map();
+  for(let i=0;i<batches.length;i++){if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');const batch=batches[i];toast('正在準備'+(next==='day'?'日間':'夜間')+'光照 '+(i+1)+' / '+batches.length);maps.set(batch,await imageTexture(manifest.lightmaps[batch][next]));}
+  lightmapMaterials.forEach(({m,batch})=>{m.lightMap=maps.get(batch);m.needsUpdate=true;});
+  applyLightingState(next);await buildProbes(next);if(renderer.getContext().isContextLost())throw Error('繪圖資源不足，請重試');
+  $('#lighting').value=next;displayTick++;composer.render();snapshot.remove();dirty=true;toast(next==='day'?'日間光照':'暮色光照');
+ }catch(e){if(!viewerDisposed){light='unavailable';diagnostics.errors.push(String(e));toast('光照準備失敗：'+e.message);if(snapshot){snapshot.retry.hidden=false;snapshot.retry.onclick=()=>setLighting(next);}}}
+ finally{$('#lighting').disabled=false;lightingBusy=false;if(!viewerDisposed)window.neridaSetVisible((snapshot?.visibleBefore??visibleBefore)&&!lightingCover);const pending=pendingLighting;pendingLighting=null;if(pending&&pending!==light)await setLighting(pending);}
+}
+
 function setQuality(next,announce=true){
  quality=next;diagnostics.quality=next;
  const ratios={high:Math.min(devicePixelRatio,2),balanced:Math.min(devicePixelRatio,1.25),performance:1};renderer.setPixelRatio(ratios[next]);composer.setPixelRatio(ratios[next]);
@@ -407,11 +431,11 @@ window.addEventListener('message',event=>{if(event.source===window.parent&&event
 // NERIDA_SINGLE_SCENE_LIFECYCLE_START
 function notifyHost(status,details={}){if(window.parent!==window&&!viewerDisposed)window.parent.postMessage({type:'nerida-viewer',version:1,status,...details},location.origin);}
 function saveView(){return {position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:mode==='orbit'?orbit.target.toArray():camera.getWorldDirection(camera.position.clone()).multiplyScalar(7).add(camera.position).toArray(),fov:camera.fov,light,quality,index:Number(document.querySelector('#bookmarks button.active')?.dataset.index??0)};}
-async function waitForLighting(){const start=performance.now();while(lightingBusy||probeBusy){if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');if(performance.now()-start>30000)throw Error('光照切換尚未完成，請稍後重試');await new Promise(r=>setTimeout(r,20));}}
+async function waitForLighting(){const start=performance.now();while(lightingBusy||probeBusy){if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');if(performance.now()-start>30000)throw Error('光照切換尚未完成，請稍後重試');await new Promise(r=>setTimeout(r,20));}if(lightingCover)throw Error('請先重試並完成目前的光照切換');}
 async function restoreView(saved){if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');await waitForLighting();if(saved){setMode('orbit');transition=null;camera.position.fromArray(saved.position);camera.quaternion.fromArray(saved.quaternion);orbit.target.fromArray(saved.target);camera.fov=saved.fov;camera.updateProjectionMatrix();orbit.update();if(quality!==(saved.quality||'high'))setQuality(saved.quality||'high',false);const index=saved.index,room=rooms[index];if(room){$('#view-number').textContent=String(index+1).padStart(2,'0')+' / '+rooms.length;$('#view-title').textContent=room[1];$('#view-description').textContent=room[2];document.querySelectorAll('#bookmarks button').forEach(b=>b.classList.toggle('active',+b.dataset.index===index));}else{$('#view-number').textContent='自由視角';$('#view-title').textContent='設計比較';$('#view-description').textContent='維持相同視角，查看兩版設計。';document.querySelectorAll('#bookmarks button').forEach(b=>b.classList.remove('active'));}if(saved.light&&saved.light!==light){const errors=diagnostics.errors.length;await setLighting(saved.light);if(light!==saved.light||diagnostics.errors.length!==errors)throw Error('光照切換未完成');}}if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');displayTick++;composer.render();dirty=true;}
 let residentPreparation=null;
-async function prepareResident(){if(residentPreparation)return residentPreparation;residentPreparation=(async()=>{window.neridaSetVisible(false);await waitForLighting();if(diagnostics.errors.length)throw Error('場景準備有未解決錯誤，請重試');const batches=[...new Set(lightmapMaterials.map(x=>x.batch))];for(const variant of ['night','day']){for(let i=0;i<batches.length;i++){if(viewerDisposed)throw new DOMException('Viewer disposed','AbortError');notifyHost('progress',{value:100,text:(variant==='night'?'預備夜間光照':'確認日間光照')+'… '+(i+1)+' / '+batches.length});const texture=await imageTexture(manifest.lightmaps[batches[i]][variant]);renderer.initTexture(texture);await new Promise(r=>setTimeout(r,0));}notifyHost('progress',{value:100,text:variant==='night'?'預備夜間反射與材質…':'完成日間反射與材質…'});const errors=diagnostics.errors.length;await setLighting(variant);if(light!==variant||reflectionMaps[variant].length!==6||diagnostics.errors.length!==errors)throw Error('日夜光照或反射準備未完成');await renderer.compileAsync(scene,camera);displayTick++;composer.render();}const allTextures=new Set();scene.traverse(o=>{for(const m of (Array.isArray(o.material)?o.material:[o.material]).filter(Boolean))for(const value of Object.values(m))if(value?.isTexture)allTextures.add(value);});for(const texture of allTextures)renderer.initTexture(texture);if(renderer.getContext().isContextLost())throw Error('GPU 資源不足，場景準備失敗');clearTimeout(toast.timer);$('#toast').hidden=true;renderer.domElement.dataset.residentPrepared='true';renderer.domElement.dataset.releasedPixelBytes=String(diagnostics.releasedPixelBytes||0);return true;})();return residentPreparation;}
-function disposeViewer(){if(viewerDisposed)return null;viewerDisposed=true;viewerVisible=false;ready=false;cancelAnimationFrame(frameRequest);keys.clear();if(pointer.isLocked)pointer.unlock();delivery?.dispose();sceneDecoder?.dispose();clearTimeout(toast.timer);const report=releaseResources({scene,renderer,composer,controls:[orbit,pointer],targets:envTargets,extraMaterials:materials});for(const promise of textures.values())promise.then(t=>{t.dispose();if(t.image?.data)t.image.data=null;}).catch(()=>{});textures.clear();materials.clear();collisionMeshes.length=0;lightmapMaterials.length=0;mirrors.length=0;envTargets.length=0;reflectionMaps.day.length=0;reflectionMaps.night.length=0;lightmapJobs.clear();pendingLightmaps.length=0;renderer.domElement.dataset.disposed='true';return {version:1,...report};}
+async function prepareResident(){if(residentPreparation)return residentPreparation;residentPreparation=(async()=>{window.neridaSetVisible(false);await waitForLighting();if(diagnostics.errors.length||reflectionMaps[light]?.length!==6)throw Error('完整光照或反射尚未準備完成');await renderer.compileAsync(scene,camera);displayTick++;composer.render();if(renderer.getContext().isContextLost())throw Error('GPU 資源不足，請重試');clearTimeout(toast.timer);$('#toast').hidden=true;renderer.domElement.dataset.residentPrepared='true';renderer.domElement.dataset.memoryPolicy='one-viewer-one-lighting';renderer.domElement.dataset.releasedPixelBytes=String(diagnostics.releasedPixelBytes||0);return true;})();return residentPreparation;}
+function disposeViewer(){if(viewerDisposed)return null;viewerDisposed=true;viewerVisible=false;ready=false;cancelAnimationFrame(frameRequest);keys.clear();if(pointer.isLocked)pointer.unlock();delivery?.dispose();sceneDecoder?.dispose();lightingCover?.remove();clearTimeout(toast.timer);const report=releaseResources({scene,renderer,composer,controls:[orbit,pointer],targets:envTargets,extraMaterials:materials});for(const promise of textures.values())promise.then(t=>{t.dispose();if(t.image?.data)t.image.data=null;}).catch(()=>{});textures.clear();materials.clear();collisionMeshes.length=0;lightmapMaterials.length=0;mirrors.length=0;envTargets.length=0;reflectionMaps.day.length=0;reflectionMaps.night.length=0;lightmapJobs.clear();pendingLightmaps.length=0;renderer.domElement.dataset.disposed='true';return {version:1,...report};}
 window.neridaLifecycle={prepare:prepareResident,restore:restoreView,dispose:disposeViewer,async capture(){await waitForLighting();const state=saveView();if(viewerDisposed||!interactive)return {state,blob:null};transition=null;keys.clear();if(pointer.isLocked)pointer.unlock();displayTick++;composer.render();const blob=await new Promise(resolve=>renderer.domElement.toBlob(resolve,'image/png'));return {state,blob};}};
 window.addEventListener('pagehide',disposeViewer,{once:true});
 renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();if(!viewerDisposed){window.neridaSetVisible(false);notifyHost('context-lost');}});
