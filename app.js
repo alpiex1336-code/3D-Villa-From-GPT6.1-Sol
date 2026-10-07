@@ -1,7 +1,8 @@
 import {createGILoader,releaseLighting} from './lighting-memory.ca64dc812b1f.js';
 import {releaseResources} from './viewer-lifecycle.640f856397fa.js';
 import {releaseUploadedPixels} from './resident-textures.e8d6de2920a4.js';
-import {createDelivery} from './asset-transport.f8fb4ec56162.js';
+import {cachedBVH} from './bvh-cache.d5b2526b91a4.js';
+import {createDelivery} from './asset-transport.4389a4584dbc.js';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {DRACOLoader} from 'three/addons/loaders/DRACOLoader.js';
@@ -148,7 +149,7 @@ async function setupMesh(o,label){
  }
  // Ray collision is geometry-based, including glazing, openings and stairs.
  if(!o.isInstancedMesh && (o.userData?.source_collection==='01 Architecture'||o.parent?.userData?.source_collection==='01 Architecture'||ms.some(m=>m.userData?.lightmap_batch&&o.name.startsWith('WEB_BATCH')))){
-  if(o.geometry.attributes.position.count<300000){o.geometry.boundsTree=new MeshBVH(o.geometry,{targetLeafSize:12});o.raycast=acceleratedRaycast;collisionMeshes.push(o);}
+  if(o.geometry.attributes.position.count<300000){await cachedBVH(o.geometry);o.raycast=acceleratedRaycast;collisionMeshes.push(o);}
  }
 }
 function addWaterNormal(m){

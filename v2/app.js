@@ -1,8 +1,9 @@
 import {createGILoader,releaseLighting} from '../lighting-memory.ca64dc812b1f.js';
 import {releaseResources} from '../viewer-lifecycle.640f856397fa.js';
 import {releaseUploadedPixels} from '../resident-textures.e8d6de2920a4.js';
-import {createDelivery} from '../asset-transport.f8fb4ec56162.js';
-import {WalkController} from './navigation.js';
+import {cachedBVH} from '../bvh-cache.d5b2526b91a4.js';
+import {createDelivery} from '../asset-transport.4389a4584dbc.js';
+import {WalkController} from './navigation.js?v=57f71e0d60f7';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {DRACOLoader} from 'three/addons/loaders/DRACOLoader.js';
@@ -143,11 +144,11 @@ async function setupMesh(o,{deferLightmaps=false,deferCollision=false}={}){
  }
  // Ray collision is geometry-based, including glazing, openings and stairs.
  if(!o.isInstancedMesh && (o.userData?.source_collection==='01 Architecture'||o.parent?.userData?.source_collection==='01 Architecture'||ms.some(m=>m.userData?.lightmap_batch&&o.name.startsWith('WEB_BATCH')))){
-  if(o.geometry.attributes.position.count<300000){if(deferCollision)pendingCollisionMeshes.push(o);else indexCollisionMesh(o);}
+  if(o.geometry.attributes.position.count<300000){if(deferCollision)pendingCollisionMeshes.push(o);else await indexCollisionMesh(o);}
  }
 }
-function indexCollisionMesh(o){o.geometry.boundsTree=new MeshBVH(o.geometry,{targetLeafSize:12});o.raycast=acceleratedRaycast;collisionMeshes.push(o);}
-async function buildCollisionIndex(){for(let i=0;i<pendingCollisionMeshes.length;i+=6){for(const o of pendingCollisionMeshes.slice(i,i+6))indexCollisionMesh(o);progress(87+2*Math.min(1,(i+6)/Math.max(1,pendingCollisionMeshes.length)),'正在準備步行碰撞資料…');await new Promise(resolve=>setTimeout(resolve,0));}pendingCollisionMeshes.length=0;}
+async function indexCollisionMesh(o){await cachedBVH(o.geometry);o.raycast=acceleratedRaycast;collisionMeshes.push(o);}
+async function buildCollisionIndex(){for(let i=0;i<pendingCollisionMeshes.length;i+=6){for(const o of pendingCollisionMeshes.slice(i,i+6))await indexCollisionMesh(o);progress(87+2*Math.min(1,(i+6)/Math.max(1,pendingCollisionMeshes.length)),'正在準備步行碰撞資料…');await new Promise(resolve=>setTimeout(resolve,0));}pendingCollisionMeshes.length=0;}
 async function loadLightmaps(bindings,start,end,label='日間光照'){
  const byBatch=new Map();for(const binding of bindings){if(!byBatch.has(binding.batch))byBatch.set(binding.batch,[]);byBatch.get(binding.batch).push(binding.m);}
  const entries=[...byBatch.entries()];let loaded=0;
